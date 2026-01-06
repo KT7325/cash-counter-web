@@ -16,32 +16,28 @@
 
             <section>
                 <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 border-b-4 border-emerald-500 pb-2">
-                    <i class="fa-solid fa-money-bill-1-wave text-emerald-500"></i> Currency Notes
+                    <i class="fa-solid fa-money-bill-1-wave text-emerald-500 text-center"></i>Cash Counter By KT
                 </h2>
                 <div id="notes-container" class="space-y-3">
                     <template id="row-template">
                         <div class="flex items-center justify-between p-3 rounded-lg border-l-4">
                             <span class="font-bold text-lg label-text"></span>
                             <div class="flex items-center gap-4">
-                                <input type="number" min="0" value="" class="w-20 p-2 border rounded text-center focus:ring-2 outline-none count-input">
-                                <span class="font-bold text-lg min-w-[60px] text-right row-total">₹0</span>
+                                <input type="number" min="0" value="" placeholder="0" class="w-20 p-2 border rounded text-center focus:ring-2 outline-none count-input">
+                                <span class="font-bold text-lg min-w-[60px] text-right row-total">0</span>
                             </div>
                         </div>
                     </template>
                 </div>
-            </section>
+                
+                <div id="coins-container" class="space-y-3 mt-6 mb-8"></div>
+            
 
-            <section class="flex flex-col">
-                <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 border-b-4 border-gray-700 pb-2">
-                    <i class="fa-solid fa-coins text-gray-700"></i> Coins
-                </h2>
-                <div id="coins-container" class="space-y-3 mb-8"></div>
-
-                <div class="mt-auto bg-gradient-to-r from-emerald-500 to-blue-600 text-white p-8 rounded-2xl text-center shadow-lg">
+                <div class="mt-auto bg-gradient-to-r from-emerald-500 to-blue-600 text-white p-8 rounded-2xl shadow-lg">
                     <div class="text-xl flex justify-center items-center gap-2 mb-2">
                         <i class="fa-solid fa-calculator"></i> Total Amount
                     </div>
-                    <div id="grand-total" class="text-5xl font-black mb-4">₹0</div>
+                    <div id="grand-total" class="text-5xl font-black mb-4 text-center w-full">0</div>
 
                     <div class="pt-4 border-t border-white/20">
                         <span class="text-sm uppercase tracking-widest opacity-80 font-bold">In Words:</span>
@@ -49,8 +45,8 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <button onclick="clearAll()" class="bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition">
+                <div class="flex justify-center mt-6">
+                    <button onclick="clearAll()" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
                         <i class="fa-solid fa-trash"></i> Clear All
                     </button>
                 </div>
@@ -101,8 +97,8 @@
         };
 
         function init() {
-            renderSection('notes-container', denominations.notes, 'Notes');
-            renderSection('coins-container', denominations.coins, 'Coins');
+            renderSection('notes-container', denominations.notes, '');
+            renderSection('coins-container', denominations.coins, '');
         }
 
         function renderSection(containerId, list, suffix) {
@@ -113,7 +109,7 @@
                 const clone = template.content.cloneNode(true);
                 const wrapper = clone.querySelector('div');
                 wrapper.className += ` ${item.color}`;
-                clone.querySelector('.label-text').textContent = `₹${item.val} ${suffix}`;
+                clone.querySelector('.label-text').textContent = suffix ? `${item.val} ${suffix}` : `${item.val}`;
 
                 const input = clone.querySelector('.count-input');
                 input.dataset.value = item.val;
@@ -131,10 +127,10 @@
                 const multiplier = parseInt(input.dataset.value);
                 const rowTotal = count * multiplier;
                 grandTotal += rowTotal;
-                input.nextElementSibling.textContent = `₹${rowTotal}`;
+                input.nextElementSibling.textContent = `${rowTotal}`;
             });
 
-            document.getElementById('grand-total').textContent = `₹${grandTotal}`;
+            document.getElementById('grand-total').textContent = `Rs. ${grandTotal}`;
             document.getElementById('total-in-words').textContent = numberToWords(grandTotal) + " Rupees Only";
         }
 
@@ -169,7 +165,7 @@
         }
 
         function clearAll() {
-            document.querySelectorAll('.count-input').forEach(input => input.value = 0);
+            document.querySelectorAll('.count-input').forEach(input => input.value = "");
             calculate();
         }
 
