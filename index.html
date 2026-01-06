@@ -18,6 +18,17 @@
                 <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 border-b-4 border-emerald-500 pb-2">
                     <i class="fa-solid fa-money-bill-1-wave text-emerald-500 text-center"></i>Cash Counter By KT
                 </h2>
+                
+                <div class="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl border-2 border-blue-200 shadow-md">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-calendar text-blue-600 text-2xl"></i>
+                            <label for="date-input" class="font-bold text-lg text-blue-700">Select Date:</label>
+                        </div>
+                        <input type="date" id="date-input" class="p-3 px-4 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-blue-700 font-semibold text-lg" />
+                    </div>
+                </div>
+                
                 <div id="notes-container" class="space-y-3">
                     <template id="row-template">
                         <div class="flex items-center justify-between p-3 rounded-lg border-l-4">
@@ -45,10 +56,22 @@
                     </div>
                 </div>
 
-                <div class="flex justify-center mt-6">
+                <div class="flex justify-between gap-4 mt-6">
                     <button onclick="clearAll()" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
                         <i class="fa-solid fa-trash"></i> Clear All
                     </button>
+                    <button onclick="saveData()" id="save-btn" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
+                    </button>
+                </div>
+                
+                <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4">
+                        <div class="animate-spin">
+                            <i class="fa-solid fa-spinner text-4xl text-green-500"></i>
+                        </div>
+                        <p class="text-gray-700 font-semibold">Saving data...</p>
+                    </div>
                 </div>
             </section>
         </div>
@@ -97,6 +120,13 @@
         };
 
         function init() {
+            // Set up date picker
+            const dateInput = document.getElementById('date-input');
+            const today = new Date().toISOString().split('T')[0];
+            
+            dateInput.value = today;
+            dateInput.max = today;
+            
             renderSection('notes-container', denominations.notes, '');
             renderSection('coins-container', denominations.coins, '');
         }
@@ -168,7 +198,92 @@
             document.querySelectorAll('.count-input').forEach(input => input.value = "");
             calculate();
         }
+        function saveData() {
+            const loader = document.getElementById('loader');
+            const saveBtn = document.getElementById('save-btn');
+            loader.classList.remove('hidden');
+            saveBtn.disabled = true;
+            
+            const dateInput = document.getElementById('date-input');
+            const grandTotalText = document.getElementById('grand-total').textContent;
+            const total = parseInt(grandTotalText.replace('Rs. ', '')) || 0;
+            
+            // Collect denomination counts
+            const data = {
+                date: dateInput.value,
+                d500: 0,
+                d200: 0,
+                d100: 0,
+                d50: 0,
+                d20: 0,
+                d10: 0,
+                d5: 0,
+                d2: 0,
+                d1: 0,
+                total: total
+            };
+            
+            // Map input values to denomination keys
+            const denominationMap = {
+                '500': 'd500',
+                '200': 'd200',
+                '100': 'd100',
+                '50': 'd50',
+                '20': 'd20',
+                '10': 'd10',
+                '5': 'd5',
+                '2': 'd2',
+                '1': 'd1'
+            };
+            
+            document.querySelectorAll('.count-input').forEach(input => {
+                const value = input.dataset.value;
+                const count = parseInt(input.value) || 0;
+                const key = denominationMap[value];
+                if (key) {
+                    data[key] = count;
+                }
+            });
+            
+            console.log('Sending data to Google Sheets:', data);
+            
+            // Save to Google Sheets
+            const googleSheetUrl = 'https://script.google.com/macros/s/AKfycbxOUZ2Hyeq1gVO5t272M4EuN2TlqXwy2oLNC4WUWMrJGKrk3LxMBnztLia2c0rKWiz1Ww/exec';
+            
+            fetch(googleSheetUrl, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                mode: 'no-cors'
+            })
+            .then(response => {
+                console.log('Data sent to Google Sheets (no-cors mode)');
+                loader.classList.add('hidden');
+                saveBtn.disabled = false;
+                alert('✓ Data saved to Google Sheets successfully!');
+                // Also save locally
+                localStorage.setItem('cashCounterData', JSON.stringify(data));
+                clearAll();
+            })
+            .catch(error => {
+                console.error('Network error:', error);
+                loader.classList.add('hidden');
+                saveBtn.disabled = false;
+                alert('⚠ Error sending data: ' + error.message);
+            });
+        }
 
+        function loadData() {
+            const saved = localStorage.getItem('cashCounterData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.querySelectorAll('.count-input').forEach((input, index) => {
+                    if (data[`denomination_${index}`]) {
+                        input.value = data[`denomination_${index}`];
+                    }
+                });
+                calculate();
+            }
+        }
         function loadExample() {
             document.querySelectorAll('.count-input').forEach(input => {
                 input.value = Math.floor(Math.random() * 5);
