@@ -34,7 +34,7 @@
                         <div class="flex items-center justify-between p-3 rounded-lg border-l-4">
                             <span class="font-bold text-lg label-text"></span>
                             <div class="flex items-center gap-4">
-                                <input type="number" min="0" value="" placeholder="0" class="w-20 p-2 border rounded text-center focus:ring-2 outline-none count-input">
+                                <input type="number" min="0" value="" placeholder="0" inputmode="numeric" pattern="[0-9]*" class="w-20 p-2 border rounded text-center focus:ring-2 outline-none count-input">
                                 <span class="font-bold text-lg min-w-[60px] text-right row-total">0</span>
                             </div>
                         </div>
@@ -106,15 +106,15 @@
             ],
             coins: [{
                     val: 5,
-                    color: 'border-slate-400 bg-slate-50 text-slate-700'
+                    color: 'border-slate-400 bg-orange-50 text-slate-700'
                 },
                 {
                     val: 2,
-                    color: 'border-slate-300 bg-slate-50 text-slate-700'
+                    color: 'border-slate-300 bg-blue-50 text-slate-700'
                 },
                 {
                     val: 1,
-                    color: 'border-slate-200 bg-slate-50 text-slate-700'
+                    color: 'border-slate-200 bg-pink-50 text-slate-700'
                 }
             ]
         };
@@ -198,6 +198,15 @@
             document.querySelectorAll('.count-input').forEach(input => input.value = "");
             calculate();
         }
+        function formatDateToDDMMMYYYY(isoDate) {
+            if (!isoDate) return '';
+            const d = new Date(isoDate);
+            if (isNaN(d)) return isoDate;
+            const day = String(d.getDate()).padStart(2, '0');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${day}/${months[d.getMonth()]}/${d.getFullYear()}`;
+        }
+
         function saveData() {
             const loader = document.getElementById('loader');
             const saveBtn = document.getElementById('save-btn');
@@ -210,7 +219,7 @@
             
             // Collect denomination counts
             const data = {
-                date: dateInput.value,
+                date: formatDateToDDMMMYYYY(dateInput.value),
                 d500: 0,
                 d200: 0,
                 d100: 0,
@@ -248,7 +257,7 @@
             console.log('Sending data to Google Sheets:', data);
             
             // Save to Google Sheets
-            const googleSheetUrl = 'https://script.google.com/macros/s/AKfycbxOUZ2Hyeq1gVO5t272M4EuN2TlqXwy2oLNC4WUWMrJGKrk3LxMBnztLia2c0rKWiz1Ww/exec';
+            const googleSheetUrl = 'https://script.google.com/macros/s/AKfycbwAk7Nhoq_-GEXw2YbHFeTjYgmcCUjEcAmVKl2rIibtMLUJmEt4-QWb2HJRj1O3uhupFQ/exec';
             
             fetch(googleSheetUrl, {
                 method: 'POST',
