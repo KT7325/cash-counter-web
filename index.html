@@ -18,6 +18,9 @@
             margin: 0;
             background-color: var(--bg-cream);
             color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* Header Section */
@@ -68,46 +71,41 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             padding: 0 10% 50px 10%;
+            flex: 1;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .icon-circle {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
             color: white;
-            font-size: 30px;
+            font-size: 28px;
         }
 
         .bg-black { background-color: #333; }
         .bg-red { background-color: var(--primary-red); }
-
-        .card h3 {
-            margin: 10px 0;
-            font-size: 20px;
-        }
-
-        .card p {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-bottom: 25px;
-            line-height: 1.4;
-            min-height: 40px;
-        }
+        .bg-dark-green { background-color: #006400; }
 
         .action-btn {
             background-color: var(--primary-red);
@@ -170,6 +168,23 @@
             color: #999;
         }
 
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--bg-cream);
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        footer b {
+            color: var(--primary-red);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             header {
@@ -196,17 +211,17 @@
 
     <div class="dashboard-container">
         <div class="card">
-            <div class="icon-circle bg-black">
-                <i class="fa-solid fa-user-graduate"></i>
+            <div class="icon-circle bg-dark-green">
+                <i class="fa-solid fa-calculator"></i>
             </div>
             <a href="cashcounter.html" class="action-btn">Cash Counter <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
         <div class="card">
             <div class="icon-circle bg-red">
-                <i class="fa-brands fa-dropbox"></i>
+                <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
-            <a href="resources.html" class="action-btn">Cashew <i class="fa-solid fa-circle-arrow-right"></i></a>
+            <a href="cashew.html" class="action-btn">Cashew <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
         <div class="card">

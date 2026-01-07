@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashew - Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 p-4 md:p-10 font-sans">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <section>
+            <div class="flex justify-between items-center mb-6 border-b-4 border-red-500 pb-2">
+                <h2 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-file-invoice-dollar text-red-500"></i>Thammineni's House - Expense Tracker
+                </h2>
+                <a href="index.html" class="text-gray-500 hover:text-red-500 transition">
+                    <i class="fa-solid fa-home text-xl"></i>
+                </a>
+            </div>
+
+            <!-- Date Picker & Save Button -->
+            <div class="mb-6 flex justify-end items-center gap-3">
+                <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border">
+                    <i class="fa-regular fa-calendar text-gray-500"></i>
+                    <input type="date" id="date-input" class="bg-transparent outline-none text-gray-700 font-semibold" />
+                </div>
+                <button onclick="saveData()" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-bold flex items-center gap-2 transition text-sm shadow-md">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+            </div>
+
+            <!-- Expenses List -->
+            <div id="expenses-container" class="space-y-3">
+                <!-- Rows will be injected here -->
+            </div>
+
+            <!-- Add Row Button -->
+            <div class="mt-4 text-center">
+                <button onclick="addRow()" class="text-red-500 hover:text-red-700 font-semibold flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded hover:bg-red-50 transition">
+                    <i class="fa-solid fa-plus-circle"></i> Add Row
+                </button>
+            </div>
+
+            <!-- Total -->
+            <div class="mt-8 bg-gradient-to-r from-red-500 to-pink-600 text-white p-6 rounded-xl shadow-lg">
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold opacity-90">Today Expenses</span>
+                    <span id="total-amount" class="text-4xl font-black">Rs. 0.00</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-4 mt-6">
+                <button onclick="clearAll()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-trash"></i> Clear All
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Template for Expense Row -->
+    <template id="expense-row-template">
+        <div class="flex gap-3 items-start expense-row group">
+            <div class="w-1/4">
+                <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white category-select">
+                    <option value="Select">Select Category</option>
+                    <option value="Home">Home</option>
+                    <option value="My Personal">My Personal</option>
+                    <option value="My Family">My Family</option>
+                    <option value="For Latha">For Latha</option>
+                    <option value="Baby">Baby</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Mutual Funds/Investments">Mutual Funds/Investments</option>
+                    <option value="Lap EMI">Lap EMI</option>
+                </select>
+            </div>
+            <div class="flex-grow">
+                <input type="text" placeholder="Description (e.g. Water Can - 10, tiffin - 45)"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none description-input transition shadow-sm"
+                       oninput="parseAndCalculate(this)">
+            </div>
+            <div class="w-32 flex-shrink-0">
+                <input type="number" step="0.01" placeholder="0.00"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-right amount-input font-mono font-bold text-gray-700 shadow-sm"
+                       oninput="calculateTotal()">
+            </div>
+            <button onclick="removeRow(this)" class="mt-3 text-gray-300 hover:text-red-500 transition opacity-0 group-hover:opacity-100">
+                <i class="fa-solid fa-circle-minus text-xl"></i>
+            </button>
+        </div>
+    </template>
+
+    <script>
+        function init() {
+            const dateInput = document.getElementById('date-input');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+
+            // Add initial rows
+            const defaultCategories = ["Home", "My Personal", "My Family"];
+            for (let i = 0; i < 3; i++) {
+                addRow(defaultCategories[i]);
+            }
+        }
+
+        function addRow(category) {
+            const container = document.getElementById('expenses-container');
+            const template = document.getElementById('expense-row-template');
+            const clone = template.content.cloneNode(true);
+
+            if (category) {
+                const select = clone.querySelector('.category-select');
+                select.value = category;
+            }
+
+            container.appendChild(clone);
+        }
+
+        function removeRow(btn) {
+            const row = btn.closest('.expense-row');
+            const container = document.getElementById('expenses-container');
+            if (container.children.length > 1) {
+                row.remove();
+                calculateTotal();
+            } else {
+                // If it's the last row, just clear it
+                row.querySelector('.description-input').value = '';
+                row.querySelector('.amount-input').value = '';
+                row.querySelector('.category-select').selectedIndex = 0;
+                calculateTotal();
+            }
+        }
+
+        function parseAndCalculate(descInput) {
+            const row = descInput.closest('.expense-row');
+            const amountInput = row.querySelector('.amount-input');
+            const text = descInput.value;
+
+            if (!text) {
+                amountInput.value = '';
+                calculateTotal();
+                return;
+            }
+
+            // Logic: Split by comma, find last number in each part, sum them up.
+            const parts = text.split(',');
+            let total = 0;
+            let foundNumber = false;
+
+            parts.forEach(part => {
+                // Match numbers (integer or decimal)
+                // This regex matches numbers like 10, 10.50, .50
+                const matches = part.match(/(\d+(\.\d+)?|\.\d+)/g);
+
+                if (matches && matches.length > 0) {
+                    // Take the last number found in this segment
+                    const lastNumStr = matches[matches.length - 1];
+                    const val = parseFloat(lastNumStr);
+                    if (!isNaN(val)) {
+                        total += val;
+                        foundNumber = true;
+                    }
+                }
+            });
+
+            if (foundNumber) {
+                amountInput.value = total; // Keep it as number for input, formatting happens in total
+            } else {
+                amountInput.value = '';
+            }
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let grandTotal = 0;
+            const amounts = document.querySelectorAll('.amount-input');
+
+            amounts.forEach(input => {
+                const val = parseFloat(input.value);
+                if (!isNaN(val)) {
+                    grandTotal += val;
+                }
+            });
+
+            document.getElementById('total-amount').textContent = `Rs. ${grandTotal.toFixed(2)}`;
+        }
+
+        function clearAll() {
+            const container = document.getElementById('expenses-container');
+            container.innerHTML = '';
+            const defaultCategories = ["Home", "My Personal", "My Family"];
+            for (let i = 0; i < 3; i++) {
+                addRow(defaultCategories[i]);
+            }
+            calculateTotal();
+        }
+
+        function saveData() {
+            // Placeholder for save functionality
+            alert("Save functionality to be implemented (similar to Cash Counter)");
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+
+</html>
