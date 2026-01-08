@@ -65,9 +65,9 @@
     <!-- Template for Expense Row -->
     <template id="expense-row-template">
         <div class="expense-row group bg-gray-50 p-3 rounded-lg border border-gray-200 shadow-sm relative">
-            <div class="flex justify-between items-center gap-3 mb-2">
-                <div class="flex-grow max-w-[60%]">
-                    <select class="w-50 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white category-select text-sm font-medium">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-2">
+                <div class="w-full sm:w-auto sm:flex-grow sm:max-w-[40%]">
+                    <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white category-select text-sm font-medium">
                         <option value="Select">Select Category</option>
                         <option value="Home">Home</option>
                         <option value="My Personal">My Personal</option>
@@ -79,8 +79,8 @@
                         <option value="Lap EMI">Lap EMI</option>
                     </select>
                 </div>
-                <div class="flex items-center gap-2">
-                    <div class="w-32">
+                <div class="flex items-center justify-end gap-2 w-full sm:w-auto">
+                    <div class="w-50 sm:w-50">
                         <input type="number" step="0.01" placeholder="0.00"
                             class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-right amount-input font-mono font-bold text-gray-700 shadow-sm"
                             oninput="calculateTotal()">
