@@ -7,6 +7,24 @@
     <title>Cashew - Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="config.js"></script>
+    <style>
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--bg-cream);
+        }
+
+        footer p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        footer b {
+            color: var(--primary-red);
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 p-4 md:p-10 font-sans">
@@ -28,7 +46,7 @@
                     <i class="fa-regular fa-calendar text-gray-500"></i>
                     <input type="date" id="date-input" class="bg-transparent outline-none text-gray-700 font-semibold" />
                 </div>
-                <button onclick="saveData()" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-bold flex items-center gap-2 transition text-sm shadow-md">
+                <button onclick="saveData()" id="save-btn" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-bold flex items-center gap-2 transition text-sm shadow-md">
                     <i class="fa-solid fa-floppy-disk"></i> Save
                 </button>
             </div>
@@ -57,6 +75,15 @@
                 <button onclick="clearAll()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
                     <i class="fa-solid fa-trash"></i> Clear All
                 </button>
+            </div>
+
+            <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4">
+                    <div class="animate-spin">
+                        <i class="fa-solid fa-spinner text-4xl text-green-500"></i>
+                    </div>
+                    <p class="text-gray-700 font-semibold">Saving data...</p>
+                </div>
             </div>
         </section>
     </div>
@@ -203,14 +230,84 @@
             calculateTotal();
         }
 
+        function formatDateToDDMMMYYYY(isoDate) {
+            if (!isoDate) return '';
+            const d = new Date(isoDate);
+            if (isNaN(d)) return isoDate;
+            const day = String(d.getDate()).padStart(2, '0');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${day}/${months[d.getMonth()]}/${d.getFullYear()}`;
+        }
+
         function saveData() {
-            // Placeholder for save functionality
-            alert("Save functionality to be implemented (similar to Cash Counter)");
+            const loader = document.getElementById('loader');
+            const saveBtn = document.getElementById('save-btn');
+            loader.classList.remove('hidden');
+            saveBtn.disabled = true;
+
+            const dateInput = document.getElementById('date-input');
+            const rows = document.querySelectorAll('.expense-row');
+            const expenses = [];
+            let grandTotal = 0;
+
+            rows.forEach(row => {
+                const category = row.querySelector('.category-select').value;
+                const description = row.querySelector('.description-input').value;
+                const amount = parseFloat(row.querySelector('.amount-input').value);
+
+                if (category !== 'Select' && !isNaN(amount) && amount > 0) {
+                    expenses.push({
+                        date: formatDateToDDMMMYYYY(dateInput.value),
+                        category: category,
+                        description: description,
+                        amount: amount
+                    });
+                    grandTotal += amount;
+                }
+            });
+
+            if (expenses.length === 0) {
+                alert("Please add at least one valid expense.");
+                loader.classList.add('hidden');
+                saveBtn.disabled = false;
+                return;
+            }
+
+            const data = {
+                type: 'cashew', // To distinguish from cash counter data if using same sheet script
+                expenses: expenses,
+                total: grandTotal
+            };
+
+            console.log('Sending data to Google Sheets:', data);
+
+            fetch(CONFIG.GOOGLE_SHEET_URL_CASHEW, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                mode: 'no-cors'
+            })
+            .then(response => {
+                console.log('Data sent to Google Sheets (no-cors mode)');
+                loader.classList.add('hidden');
+                saveBtn.disabled = false;
+                alert('✓ Expenses saved to Google Sheets successfully!');
+                clearAll();
+            })
+            .catch(error => {
+                console.error('Network error:', error);
+                loader.classList.add('hidden');
+                saveBtn.disabled = false;
+                alert('⚠ Error sending data: ' + error.message);
+            });
         }
 
         // Initialize
         init();
     </script>
+
+    <footer>
+        <p>&copy; 2024 <b>Thammineni Technologies</b>. All rights reserved.</p>
+    </footer>
 </body>
 
 </html>

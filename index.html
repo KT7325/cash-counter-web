@@ -84,6 +84,9 @@
             flex-direction: column;
             align-items: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
 
         .card:hover {
@@ -106,6 +109,7 @@
         .bg-black { background-color: #333; }
         .bg-red { background-color: var(--primary-red); }
         .bg-dark-green { background-color: #006400; }
+        .bg-wallet { background-color: #8B4513; }
 
         .action-btn {
             background-color: var(--primary-red);
@@ -210,25 +214,25 @@
     </header>
 
     <div class="dashboard-container">
-        <div class="card">
+        <div class="card" onclick="window.location.href='cashcounter.html'">
             <div class="icon-circle bg-dark-green">
                 <i class="fa-solid fa-calculator"></i>
             </div>
             <a href="cashcounter.html" class="action-btn">Cash Counter <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
-        <div class="card">
+        <div class="card" onclick="window.location.href='cashew.html'">
             <div class="icon-circle bg-red">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
             </div>
             <a href="cashew.html" class="action-btn">Cashew <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
-        <div class="card">
-            <div class="icon-circle bg-black">
-                <i class="fa-solid fa-microphone-lines"></i>
+        <div class="card" onclick="window.location.href='msi.html'">
+            <div class="icon-circle bg-wallet">
+                <i class="fa-solid fa-wallet"></i>
             </div>
-            <a href="#" class="action-btn coming-soon">Others <i class="fa-solid fa-circle-arrow-right"></i></a>
+            <a href="msi.html" class="action-btn coming-soon">MSI <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
     </div>
