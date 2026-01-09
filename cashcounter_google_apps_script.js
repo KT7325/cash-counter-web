@@ -14,8 +14,8 @@ function doPost(e) {
     if (!sheet) {
       sheet = doc.insertSheet(sheetName);
       // Add headers including the new fields
-      sheet.appendRow(['Date', '500', '200', '100', '50', '20', '10', '5', '2', '1', 'Total', 'Week Expenses', 'Adjust Amount', 'A/C Paid', 'Remarks', ]);
-      sheet.getRange(1, 1, 1, 15).setFontWeight('bold').setBackground('#e0f2f1'); // Light teal background
+      sheet.appendRow(['Date', '500', '200', '100', '50', '20', '10', '5', '2', '1', 'Total', 'Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Remarks', ]);
+      sheet.getRange(1, 1, 1, 16).setFontWeight('bold').setBackground('#e0f2f1'); // Light teal background
     }
 
     var data = JSON.parse(e.postData.contents);
@@ -23,10 +23,6 @@ function doPost(e) {
     // Prepare the row data
     var row = [
       data.date,
-      data.weekExpenses || 0,   // New Field: Week Expenses
-      data.adjustAmount || 0,   // New Field: Adjust Amount
-      data.acPaid || 0,         // New Field: A/C Paid
-      data.remarks || '',       // New Field: Remarks
       data.d500 || 0,
       data.d200 || 0,
       data.d100 || 0,
@@ -36,7 +32,12 @@ function doPost(e) {
       data.d5 || 0,
       data.d2 || 0,
       data.d1 || 0,
-      data.total || 0
+      data.total || 0,
+      data.weekExpenses || 0,   // New Field: Week Expenses
+      data.adjustAmount || 0,   // New Field: Adjust Amount
+      data.atmWithdrawal || 0,  // New Field: ATM Withdrawal
+      data.acPaid || 0,         // New Field: A/C Paid
+      data.remarks || ''        // New Field: Remarks
     ];
 
     // Append the row
