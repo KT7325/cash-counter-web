@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Specific Card Styles */
+        .card-cashcounter {
+            border-top: 5px solid #4CAF50; /* Green */
+        }
+        .card-cashcounter .card-icon {
+            color: #4CAF50;
+        }
+
+        .card-cashew {
+            border-top: 5px solid #FF9800; /* Orange */
+        }
+        .card-cashew .card-icon {
+            color: #FF9800;
+        }
+
+        .card-msi {
+            border-top: 5px solid #2196F3; /* Blue */
+        }
+        .card-msi .card-icon {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <a href="denominationsreport.html" class="card card-cashcounter">
+            <i class="fas fa-calculator card-icon"></i>
+            <div class="card-title">Denominations Report</div>
+        </a>
+
+        <a href="cashewreport.html" class="card card-cashew">
+            <i class="fas fa-seedling card-icon"></i> <!-- Using seedling as a proxy for cashew/nut -->
+            <div class="card-title">Cashew Report</div>
+        </a>
+
+        <a href="msireport.html" class="card card-msi">
+            <i class="fas fa-chart-line card-icon"></i>
+            <div class="card-title">MSI Report</div>
+        </a>
+    </div>
+
+</body>
+</html>

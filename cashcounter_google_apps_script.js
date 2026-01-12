@@ -14,7 +14,7 @@ function doPost(e) {
     if (!sheet) {
       sheet = doc.insertSheet(sheetName);
       // Add headers including the new fields
-      sheet.appendRow(['Date', '500', '200', '100', '50', '20', '10', '5', '2', '1', 'Total', 'Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Remarks', ]);
+      sheet.appendRow(['Date', '500', '200', '100', '50', '20', '10', '5', '2', '1', 'Total', 'Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Remarks']);
       sheet.getRange(1, 1, 1, 16).setFontWeight('bold').setBackground('#e0f2f1'); // Light teal background
     }
 
@@ -49,6 +49,62 @@ function doPost(e) {
   } catch (e) {
     return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': e.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}
+function doGet(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+
+  try {
+    var doc = SpreadsheetApp.getActiveSpreadsheet();
+
+    // 1. Get Data from Main Sheet (CashCounter)
+    var sheetName = 'CashCounter';
+    var sheet = doc.getSheetByName(sheetName);
+    var result = [];
+
+    if (sheet) {
+      var data = sheet.getDataRange().getValues();
+      if (data.length > 1) {
+        var headers = data[0];
+        var rows = data.slice(1);
+
+        // Convert to array of objects
+        result = rows.map(function(row) {
+          var obj = {};
+          headers.forEach(function(header, index) {
+            obj[header] = row[index];
+          });
+          return obj;
+        });
+
+        // Reverse to show latest first
+        result.reverse();
+      }
+    }
+
+    // 2. Get Data from Sheet2 (Example: Reading Cell A1)
+    var sheet2 = doc.getSheetByName('Sheet2');
+    var sheet2Data = null;
+    if (sheet2) {
+      // Change "A1" to whichever cell you want to read
+      sheet2Data = sheet2.getRange("A1").getValue();
+    }
+
+    // 3. Return both sets of data
+    var responsePayload = {
+      reports: result,
+      sheet2Data: sheet2Data
+    };
+
+    return ContentService.createTextOutput(JSON.stringify(responsePayload))
+        .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': e.toString() }))
+        .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
   }
