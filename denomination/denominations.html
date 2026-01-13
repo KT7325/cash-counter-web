@@ -7,7 +7,7 @@
     <title>Currency Counter & Word Converter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="config.js"></script>
+    <script src="../config.js"></script>
     <style>
         footer {
             text-align: center;
@@ -37,7 +37,7 @@
                     <h2 class="text-2xl font-bold flex items-center gap-2">
                         <i class="fa-solid fa-money-bill-1-wave text-emerald-500 text-center"></i>Cash Counter
                     </h2>
-                    <a href="index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
+                    <a href="../index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
                         <i class="fa-solid fa-house"></i>
                     </a>
                 </div>
@@ -119,7 +119,7 @@
                         <div class="animate-spin">
                             <i class="fa-solid fa-spinner text-4xl text-green-500"></i>
                         </div>
-                        <p class="text-gray-700 font-semibold">(S) Clearing data...</p>
+                        <p class="text-gray-700 font-semibold">(S) Processing data...</p>
                     </div>
                 </div>
             </section>
@@ -168,6 +168,8 @@
             ]
         };
 
+        let editingRowIndex = null;
+
         function init() {
             // Set up date picker
             const dateInput = document.getElementById('date-input');
@@ -182,6 +184,53 @@
             document.getElementById('week-expenses-input').addEventListener('input', calculate);
             document.getElementById('adjust-amount-input').addEventListener('input', calculate);
             document.getElementById('atm-withdrawal-input').addEventListener('input', calculate);
+
+            // Check if there is data to edit
+            const editData = localStorage.getItem('editReportData');
+            if (editData) {
+                const data = JSON.parse(editData);
+                populateData(data);
+                if (data.rowIndex !== undefined) {
+                    editingRowIndex = data.rowIndex;
+                }
+                localStorage.removeItem('editReportData'); // Clear after use
+            }
+        }
+
+        function populateData(data) {
+            // Populate Date
+            if (data.Date) {
+                const dateInput = document.getElementById('date-input');
+                const date = new Date(data.Date);
+                if (!isNaN(date.getTime())) {
+                    // Adjust for timezone offset
+                    const offset = date.getTimezoneOffset();
+                    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+                    dateInput.value = adjustedDate.toISOString().split('T')[0];
+                }
+            }
+
+            // Populate Denominations
+            const denoms = [500, 200, 100, 50, 20, 10, 5, 2, 1];
+            denoms.forEach(d => {
+                const val = data[d.toString()];
+                if (val !== undefined && val !== null) {
+                    const input = document.querySelector(`.count-input[data-value="${d}"]`);
+                    if (input) {
+                        input.value = val;
+                    }
+                }
+            });
+
+            // Populate Other Fields
+            if (data['Week Expenses']) document.getElementById('week-expenses-input').value = data['Week Expenses'];
+            if (data['Adjust Amount']) document.getElementById('adjust-amount-input').value = data['Adjust Amount'];
+            if (data['ATM Withdrawal']) document.getElementById('atm-withdrawal-input').value = data['ATM Withdrawal'];
+            if (data['A/C Paid']) document.getElementById('ac-paid-input').value = data['A/C Paid'];
+            if (data['Remarks']) document.getElementById('remarks-input').value = data['Remarks'];
+
+            // Recalculate totals
+            calculate();
         }
 
         function renderSection(containerId, list, suffix) {
@@ -259,6 +308,7 @@
             document.getElementById('atm-withdrawal-input').value = "";
             document.getElementById('ac-paid-input').value = "";
             document.getElementById('remarks-input').value = "";
+            editingRowIndex = null;
             calculate();
         }
         function formatDateToDDMMMYYYY(isoDate) {
@@ -327,7 +377,16 @@
                     data[key] = count;
                 }
             });
-            
+
+            let isUpdate = false;
+            if (editingRowIndex !== null) {
+                data.action = 'update';
+                data.rowIndex = editingRowIndex;
+                // Use YYYY-MM-DD for updates to match denominationsreport.html behavior
+                data.date = dateInput.value;
+                isUpdate = true;
+            }
+
             console.log('Sending data to Google Sheets:', data);
             
             // Save to Google Sheets
@@ -340,10 +399,19 @@
                 console.log('Data sent to Google Sheets (no-cors mode)');
                 loader.classList.add('hidden');
                 saveBtn.disabled = false;
-                alert('✓ Data cleared  successfully');
+                const msg = isUpdate ? 'updated' : 'saved';
+                alert('✓ Data ' + msg + ' successfully');
                 // Also save locally
                 localStorage.setItem('cashCounterData', JSON.stringify(data));
-                clearAll();
+
+                if (isUpdate) {
+                    // Redirect back to report view if it was an update
+                    window.location.href = 'denominationsreport.html';
+                } else {
+                    // Clear form if it was a fresh entry
+                    editingRowIndex = null;
+                    clearAll();
+                }
             })
             .catch(error => {
                 console.error('Network error:', error);

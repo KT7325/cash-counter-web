@@ -7,7 +7,7 @@
     <title>Denominations Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="config.js"></script>
+    <script src="../config.js"></script>
     <style>
         footer {
             text-align: center;
@@ -57,7 +57,7 @@
                 <button onclick="fetchData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2 shadow-sm">
                     <i class="fa-solid fa-sync"></i>
                 </button>
-                <a href="index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
+                <a href="../index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
                     <i class="fa-solid fa-house"></i>
                 </a>
             </div>
@@ -442,11 +442,8 @@
             editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
             editBtn.onclick = function(e) {
                 e.stopPropagation();
-                // Ensure accordion is open
-                if (!content.classList.contains('active')) {
-                    toggleAccordion(header);
-                }
-                renderEditMode(content, data, header);
+                localStorage.setItem('editReportData', JSON.stringify(data));
+                window.location.href = 'cashcounter.html';
             };
 
             const amountDiv = document.createElement('div');
