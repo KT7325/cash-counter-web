@@ -390,7 +390,7 @@
             console.log('Sending data to Google Sheets:', data);
             
             // Save to Google Sheets
-            fetch(CONFIG.GOOGLE_SHEET_URL_CASH_COUNTER, {
+            fetch(CONFIG.GOOGLE_SHEET_URL_DENOMINATIONS, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 mode: 'no-cors'
