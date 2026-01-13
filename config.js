@@ -1,6 +1,6 @@
 const CONFIG = {
     //Prod Link
-    GOOGLE_SHEET_URL_CASH_COUNTER: 'https://script.google.com/macros/s/AKfycbzt7Dh0hXr8JXOwXEMD05Wwe_SbDIEYINgcpcWkfh3Fe5NA4dkHDzmy2WuFPIrRduiGnA/exec',
+    GOOGLE_SHEET_URL_CASH_COUNTER: 'https://script.google.com/macros/s/AKfycbyPA-Tg-g8MhrdMZPNIKFfNvU691amfVEd751V-PwVh7FmZm_HmPBiVhLSr8d25R1qUlg/exec',
     //QA Link
     //GOOGLE_SHEET_URL_CASH_COUNTER: 'https://script.google.com/macros/s/AKfycbxViPXKVueaCVxBsjNk2ndAFDWlWBipghlzUC_-u5ZlI2F_zrG6xL27eyIGjRF6NuoOPA/exec',
 
