@@ -50,12 +50,12 @@
 
     <div class="max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md sticky top-0 z-10">
-            <h2 class="text-2xl font-bold flex items-center gap-2 text-gray-800">
-                <i class="fa-solid fa-chart-pie text-emerald-500"></i> Denominations Report
-            </h2>
+            <h5 class="text-xl font-bold flex items-center gap-2 text-gray-800">
+                <i class="fa-solid fa-chart-pie text-emerald-800"></i> Denominations Report
+            </h5>
             <div class="flex gap-4">
                 <button onclick="fetchData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-sync"></i> <span class="hidden md:inline">Refresh</span>
+                    <i class="fa-solid fa-sync"></i>
                 </button>
                 <a href="index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
                     <i class="fa-solid fa-house"></i>
@@ -66,7 +66,7 @@
         <!-- Sheet2 Data Display (Centered and Styled) -->
         <div id="sheet2-data-container" class="hidden mb-8 flex justify-center">
             <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 text-center">
-                <div class="text-sm font-medium uppercase tracking-wider opacity-90 mb-1">Available Balance</div>
+                <div class="text-sm font-medium tracking-wider opacity-90 mb-1">Available Balance</div>
                 <div id="sheet2-value" class="text-3xl font-black tracking-tight"></div>
             </div>
         </div>
@@ -143,13 +143,13 @@
                         <i class="fa-regular fa-calendar-check"></i>
                     </div>
                     <div>
-                        <div class="font-bold text-gray-800">${formatDate(data.Date)}</div>
+                        <div class="font-bold text-blue-800">${formatDate(data.Date)}</div>
                         <div class="text-xs text-gray-500">Click to view details</div>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="text-right">
-                        <div class="font-bold text-lg text-gray-800">${formatCurrency(data.Total)}</div>
+                        <div class="font-bold text-lg text-green-800">${formatCurrency(data.Total)}</div>
                     </div>
                     <i class="fa-solid fa-chevron-down text-gray-400 rotate-icon"></i>
                 </div>
@@ -162,11 +162,11 @@
 
             const innerPadding = document.createElement('div');
             innerPadding.className = 'p-4';
-            
+
             // Denominations Grid
             const denomsGrid = document.createElement('div');
             denomsGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4 text-sm';
-            
+
             const denoms = [
                 { key: '500', label: '500', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
                 { key: '200', label: '200', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
@@ -179,74 +179,81 @@
                 { key: '1', label: '1', color: 'text-slate-600', bg: 'bg-slate-100', border: 'border-slate-200' }
             ];
 
-            let hasDenoms = false;
             denoms.forEach(d => {
-                if (data[d.key] && data[d.key] > 0) {
-                    hasDenoms = true;
-                    const item = document.createElement('div');
-                    item.className = `${d.bg} ${d.border} border rounded px-3 py-2 flex justify-between items-center`;
-                    item.innerHTML = `
-                        <span class="font-bold ${d.color}">₹${d.label}</span>
-                        <span class="font-mono font-semibold text-gray-700">x ${data[d.key]}</span>
-                    `;
-                    denomsGrid.appendChild(item);
+                let value = data[d.key];
+                if (value === undefined || value === null || value === '') {
+                    value = 0;
                 }
-            });
-            
-            if (hasDenoms) {
-                const denomTitle = document.createElement('h4');
-                denomTitle.className = 'text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider';
-                denomTitle.textContent = 'Denominations Breakdown';
-                innerPadding.appendChild(denomTitle);
-                innerPadding.appendChild(denomsGrid);
-            }
 
-            // Additional Details
-            const details = [
-                { label: 'Week Expenses', value: data['Week Expenses'], icon: 'fa-wallet', color: 'text-purple-600' },
-                { label: 'Adjust Amount', value: data['Adjust Amount'], icon: 'fa-sliders', color: 'text-orange-600' },
-                { label: 'ATM Withdrawal', value: data['ATM Withdrawal'], icon: 'fa-building-columns', color: 'text-blue-600' },
-                { label: 'A/C Paid', value: data['A/C Paid'], icon: 'fa-money-bill-transfer', color: 'text-green-600' }
+                const item = document.createElement('div');
+                item.className = `${d.bg} ${d.border} border rounded px-3 py-2 flex justify-between items-center`;
+                item.innerHTML = `
+                    <span class="font-bold ${d.color}">₹${d.label}</span>
+                    <span class="font-mono font-semibold text-gray-700">x ${value}</span>
+                `;
+                denomsGrid.appendChild(item);
+            });
+
+            const denomTitle = document.createElement('h4');
+            denomTitle.className = 'text-xs font-bold text-gray-400 uppercase mb-2 tracking-wider';
+            denomTitle.textContent = 'Denominations Breakdown';
+            innerPadding.appendChild(denomTitle);
+            innerPadding.appendChild(denomsGrid);
+
+            // Other Details Grid
+            const detailsGrid = document.createElement('div');
+            detailsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm mt-4 pt-4 border-t border-gray-200';
+
+            const fieldOrder = [
+                'Sunday Offerings', 'Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Week Closing Balance', 'Remarks'
             ];
 
-            let hasDetails = false;
-            const detailsContainer = document.createElement('div');
-            detailsContainer.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-200';
+            const allKeys = new Set([...fieldOrder, ...Object.keys(data)]);
 
-            details.forEach(detail => {
-                if (detail.value && detail.value != 0) {
-                    hasDetails = true;
-                    const row = document.createElement('div');
-                    row.className = 'flex items-center gap-3 bg-white p-3 rounded border border-gray-200';
-                    row.innerHTML = `
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                            <i class="fa-solid ${detail.icon} ${detail.color}"></i>
-                        </div>
-                        <div>
-                            <div class="text-xs text-gray-500 uppercase font-bold">${detail.label}</div>
-                            <div class="font-semibold text-gray-800">${formatCurrency(detail.value)}</div>
-                        </div>
+            const handledKeys = ['Date', 'Total', '500', '200', '100', '50', '20', '10', '5', '2', '1'];
+
+            let hasOtherDetails = false;
+            allKeys.forEach(key => {
+                if (handledKeys.includes(key)) return;
+
+                let value = data[key];
+                let shouldDisplay = false;
+
+                // Always display fields in fieldOrder, even if empty/null
+                if (fieldOrder.includes(key)) {
+                    shouldDisplay = true;
+                    if (value === undefined || value === null || value === '') {
+                        value = (key === 'Remarks') ? '-' : 0;
+                    }
+                } else {
+                    // For other dynamic keys, only display if they have a value
+                    if (data.hasOwnProperty(key) && value !== null && value !== '') {
+                        shouldDisplay = true;
+                    }
+                }
+
+                if (shouldDisplay) {
+                    hasOtherDetails = true;
+                    const item = document.createElement('div');
+                    item.className = 'bg-white p-3 rounded-lg border border-gray-200';
+
+                    // Check if value is a valid number for currency formatting
+                    const isCurrencyCandidate = !isNaN(parseFloat(value)) && isFinite(value);
+
+                    if (isCurrencyCandidate) {
+                        value = formatCurrency(value);
+                    }
+
+                    item.innerHTML = `
+                        <div class="text-xs text-gray-500 uppercase font-bold">${key}</div>
+                        <div class="font-semibold text-gray-800">${value}</div>
                     `;
-                    detailsContainer.appendChild(row);
+                    detailsGrid.appendChild(item);
                 }
             });
 
-            if (hasDetails) {
-                innerPadding.appendChild(detailsContainer);
-            }
-
-            // Remarks
-            if (data.Remarks) {
-                const remarksContainer = document.createElement('div');
-                remarksContainer.className = 'mt-4 bg-yellow-50 p-3 rounded border border-yellow-100 text-sm text-gray-700 flex gap-2';
-                remarksContainer.innerHTML = `
-                    <i class="fa-solid fa-note-sticky text-yellow-500 mt-1"></i>
-                    <div>
-                        <span class="font-bold text-gray-600">Remarks:</span>
-                        <span class="italic">${data.Remarks}</span>
-                    </div>
-                `;
-                innerPadding.appendChild(remarksContainer);
+            if (hasOtherDetails) {
+                innerPadding.appendChild(detailsGrid);
             }
 
             content.appendChild(innerPadding);

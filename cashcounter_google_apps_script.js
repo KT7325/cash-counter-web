@@ -53,6 +53,7 @@ function doPost(e) {
     lock.releaseLock();
   }
 }
+
 function doGet(e) {
   var lock = LockService.getScriptLock();
   lock.tryLock(10000);
@@ -60,8 +61,37 @@ function doGet(e) {
   try {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
 
-    // 1. Get Data from Main Sheet (CashCounter)
-    var sheetName = 'CashCounter';
+    // 1. Prepare Sheet2 Lookup (Date -> Week Closing Balance)
+    var sheet2 = doc.getSheetByName('Dashboard');
+    var closingBalanceMap = {};
+    var sheet2Data = null;
+
+    if (sheet2) {
+      // Existing: Get Available Balance from A1
+      sheet2Data = sheet2.getRange("G1").getValue();
+
+      // New: Build lookup map from Sheet2 (Date in Col A, Balance in Col C)
+      var lastRow = sheet2.getLastRow();
+      if (lastRow > 0) {
+        // Get data from columns A, B, C (1, 2, 3)
+        var range = sheet2.getRange(1, 1, lastRow, 3);
+        var values = range.getValues();
+        
+        for (var i = 0; i < values.length; i++) {
+          var row = values[i];
+          var dateVal = row[0]; // Column A
+          var balance = row[2]; // Column C
+          
+          if (dateVal) {
+             var dateKey = formatDateKey(dateVal);
+             closingBalanceMap[dateKey] = balance;
+          }
+        }
+      }
+    }
+
+    // 2. Get Data from Main Sheet (CashCounter)
+    var sheetName = 'Sunday Offerings';
     var sheet = doc.getSheetByName(sheetName);
     var result = [];
 
@@ -77,20 +107,20 @@ function doGet(e) {
           headers.forEach(function(header, index) {
             obj[header] = row[index];
           });
+          
+          // Inject Week Closing Balance based on Date
+          var rowDate = row[0]; // Assuming Date is first column
+          var dateKey = formatDateKey(rowDate);
+          
+          // Use the looked-up value, or 0 if not found
+          obj['Week Closing Balance'] = closingBalanceMap[dateKey] || 0;
+
           return obj;
         });
 
         // Reverse to show latest first
         result.reverse();
       }
-    }
-
-    // 2. Get Data from Sheet2 (Example: Reading Cell A1)
-    var sheet2 = doc.getSheetByName('Sheet2');
-    var sheet2Data = null;
-    if (sheet2) {
-      // Change "A1" to whichever cell you want to read
-      sheet2Data = sheet2.getRange("A1").getValue();
     }
 
     // 3. Return both sets of data
@@ -108,4 +138,11 @@ function doGet(e) {
   } finally {
     lock.releaseLock();
   }
+}
+
+function formatDateKey(date) {
+  if (date instanceof Date) {
+    return Utilities.formatDate(date, Session.getScriptTimeZone(), "dd/MMM/YYYY");
+  }
+  return date;
 }
