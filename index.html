@@ -72,6 +72,7 @@
             gap: 20px;
             padding: 0 10% 50px 10%;
             flex: 1;
+            align-items: start;
         }
 
         .card {
@@ -87,6 +88,7 @@
             cursor: pointer;
             text-decoration: none;
             color: inherit;
+            height: auto;
         }
 
         .card:hover {
@@ -111,6 +113,7 @@
         .bg-dark-green { background-color: #006400; }
         .bg-wallet { background-color: #8B4513; }
         .bg-dashboard { background-color: #2196F3; }
+        .bg-rent { background-color: #9C27B0; }
 
         .action-btn {
             background-color: var(--primary-red);
@@ -234,6 +237,13 @@
                 <i class="fa-solid fa-wallet"></i>
             </div>
             <a href="msi/msi.html" class="action-btn coming-soon">MSI <i class="fa-solid fa-circle-arrow-right"></i></a>
+        </div>
+
+        <div class="card" onclick="window.location.href='rent/tenet.html'">
+            <div class="icon-circle bg-rent">
+                <i class="fa-solid fa-house"></i>
+            </div>
+            <a href="rent/tenet.html" class="action-btn coming-soon">Rent Details <i class="fa-solid fa-circle-arrow-right"></i></a>
         </div>
 
         <div class="card" onclick="window.location.href='dashboard.html'">

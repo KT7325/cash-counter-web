@@ -5,98 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-color: #e0e5ec;
+            --text-color: #555;
+            --shadow-dark: #a3b1c6;
+            --shadow-light: #ffffff;
+            --green-accent: #4CAF50;
+            --orange-accent: #FF9800;
+            --blue-accent: #2196F3;
+            --purple-accent: #9C27B0;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 80%;
-            max-width: 1200px;
-        }
-
-        .card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+            text-shadow: 1px 1px 2px var(--shadow-light);
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            background: var(--background-color);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+            transition: box-shadow 0.3s ease-in-out;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: inset 7px 7px 15px var(--shadow-dark), inset -7px -7px 15px var(--shadow-light);
         }
 
         .card-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(0.95);
         }
 
         .card-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
-        /* Specific Card Styles */
-        .card-cashcounter {
-            border-top: 5px solid #4CAF50; /* Green */
-        }
-        .card-cashcounter .card-icon {
-            color: #4CAF50;
-        }
+        /* Icon Colors */
+        .card-cashcounter .card-icon { color: var(--green-accent); }
+        .card-cashew .card-icon { color: var(--orange-accent); }
+        .card-msi .card-icon { color: var(--blue-accent); }
+        .card-rent .card-icon { color: var(--purple-accent); }
 
-        .card-cashew {
-            border-top: 5px solid #FF9800; /* Orange */
-        }
-        .card-cashew .card-icon {
-            color: #FF9800;
-        }
-
-        .card-msi {
-            border-top: 5px solid #2196F3; /* Blue */
-        }
-        .card-msi .card-icon {
-            color: #2196F3;
+        @media (max-width: 768px) {
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <a href="denomination/denominationsreport.html" class="card card-cashcounter">
-            <i class="fas fa-calculator card-icon"></i>
-            <div class="card-title">Denominations Report</div>
-        </a>
+<h1 class="dashboard-title">Dashboard</h1>
 
-        <a href="cashew/cashewreport.html" class="card card-cashew">
-            <i class="fas fa-seedling card-icon"></i> <!-- Using seedling as a proxy for cashew/nut -->
-            <div class="card-title">Cashew Report</div>
-        </a>
+<div class="dashboard-container">
+    <a href="denomination/denominationsreport.html" class="card card-cashcounter">
+        <i class="fas fa-calculator card-icon"></i>
+        <div class="card-title">Denominations Report</div>
+    </a>
 
-        <a href="msi/msireport.html" class="card card-msi">
-            <i class="fas fa-chart-line card-icon"></i>
-            <div class="card-title">MSI Report</div>
-        </a>
-    </div>
+    <a href="cashew/cashewreport.html" class="card card-cashew">
+        <i class="fas fa-seedling card-icon"></i>
+        <div class="card-title">Cashew Report</div>
+    </a>
+
+    <a href="msi/msireport.html" class="card card-msi">
+        <i class="fas fa-chart-line card-icon"></i>
+        <div class="card-title">MSI Report</div>
+    </a>
+
+    <a href="rent/tenetreport.html" class="card card-rent">
+        <i class="fas fa-home card-icon"></i>
+        <div class="card-title">Rent Report</div>
+    </a>
+</div>
 
 </body>
 </html>
