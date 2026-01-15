@@ -10,5 +10,8 @@ const CONFIG = {
     //GOOGLE_SHEET_URL_CASHEW: 'https://script.google.com/macros/s/AKfycbz7-TPG6goJrAXw-2TZSebXf8Y_iAgKReHsQNKHg2ts01ZfILc82mX1-u2SqeTukBayRQ/exec'
 
     //Prod Link
+    GOOGLE_SHEET_URL_MSI: 'https://script.google.com/macros/s/AKfycbymQCgffCJ_XCrKk1RjgZlVTfquqzHW_n3pPYNNrINeDsTjJy0Yx18ZfgOmr6qSsCcb/exec',
+
+    //Prod Link
     GOOGLE_SHEET_URL_RENT: 'https://script.google.com/macros/s/AKfycbzpUu7Uf6y7BZd5VUqsl40aMMblhd8CR36sycoYEBPOuumM4QI7ePdSaNWDvF-_x1nKvA/exec'
 };

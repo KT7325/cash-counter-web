@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            background: #1a1a2e;
+            background-color: #111827;
             font-family: 'Roboto', sans-serif;
-            color: #e0e0e0;
+            color: #f3f4f6;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,92 +21,108 @@
             padding: 2rem 1rem;
         }
         .main-container {
-            background: #16213e;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            background-color: #1f2937;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             max-width: 900px;
             width: 100%;
+            border: 1px solid #374151;
         }
         h2 {
-            font-weight: 500;
-            margin-bottom: 30px;
+            font-weight: 700;
+            margin-bottom: 2rem;
             text-align: center;
-            color: #0f3460;
-            background: -webkit-linear-gradient(#e94560, #0f3460);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #f9fafb;
+            letter-spacing: -0.5px;
         }
-        .form-control, .form-select {
-            background: #1a1a2e;
-            border: 1px solid #0f3460;
-            color: #e0e0e0;
+        
+        /* Floating Label Overrides */
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            color: #f9fafb;
             border-radius: 8px;
-            padding: 12px 15px;
-            transition: all 0.3s ease;
-            margin-bottom: 1rem;
         }
-        .form-control::placeholder, .form-select {
-            color: #9a9a9a;
+        
+        .form-floating > label {
+            color: #9ca3af;
         }
-        .form-control:focus, .form-select:focus {
-            background: #1a1a2e;
-            border-color: #e94560;
-            box-shadow: 0 0 8px rgba(233, 69, 96, 0.3);
+        
+        .form-floating > .form-control:focus,
+        .form-floating > .form-select:focus {
+            background-color: #374151;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
             color: #fff;
         }
-        .form-select option {
-            background: #16213e;
-            color: #e0e0e0;
+        
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label,
+        .form-floating > .form-select ~ label {
+            color: #60a5fa;
+            opacity: 1;
+            background-color: #374151;
+            padding: 0 4px;
+            height: auto;
+            border-radius: 4px;
         }
+        
         .form-control[readonly] {
-            background-color: #1a1a2e;
+            background-color: #111827;
+            border-color: #374151;
+            color: #9ca3af;
         }
+        
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8);
+            filter: invert(1);
+            cursor: pointer;
+            opacity: 0.6;
         }
+        
         .btn {
             border-radius: 8px;
             padding: 12px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: 600;
+            transition: all 0.2s ease;
             border: none;
         }
         .btn-submit {
-            background: #e94560;
+            background: #3b82f6;
             color: #fff;
         }
         .btn-submit:hover {
-            background: #d43d51;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         .btn-clear {
-            background: #0f3460;
+            background: #4b5563;
             color: #fff;
         }
         .btn-clear:hover {
-            background: #1a2a4a;
+            background: #374151;
         }
+        
         .table {
-            color: #e0e0e0;
-            border-color: #0f3460;
+            color: #e5e7eb;
+            border-color: #374151;
             margin-top: 2rem;
         }
-        .table > thead {
-            background: #1a1a2e;
-        }
         .table th {
-            color: #e94560;
-            border-bottom: 2px solid #0f3460;
+            color: #9ca3af;
+            border-bottom: 2px solid #4b5563;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
         .table td {
-            border-color: #0f3460;
+            border-color: #374151;
             vertical-align: middle;
         }
         .table tbody tr:hover {
-            background-color: #1f2b4a;
+            background-color: rgba(55, 65, 81, 0.4);
         }
     </style>
 </head>
@@ -115,50 +131,72 @@
 <div class="main-container">
     <h2>Tenet Information</h2>
     <form id="tenetForm">
-        <div class="row">
-            <div class="col-12 mb-3">
-                <input type="text" class="form-control" id="date" name="date"
-                       onfocus="(this.type='date')"
-                       onblur="formatAndSetDate(this)"
-                       placeholder="Select Date">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="date" class="form-control" id="date" name="date" onblur="formatAndSetDate(this)" placeholder="Select Date">
+                    <label for="date">Select Date</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select class="form-select" id="side" name="side">
+                        <option value="" disabled selected>Select Side</option>
+                        <option value="Kalyan">Kalyan</option>
+                        <option value="Srikanth">Srikanth</option>
+                    </select>
+                    <label for="side">Side</label>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row g-3 mb-3">
             <div class="col-md-6">
-                <input type="number" class="form-control" id="rentAmount" name="rentAmount" inputmode="numeric" placeholder="Rent Amount">
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="rentAmount" name="rentAmount" inputmode="numeric" placeholder="Rent Amount">
+                    <label for="rentAmount">Rent Amount</label>
+                </div>
             </div>
             <div class="col-md-6">
-                <input type="number" class="form-control" id="paidAmount" name="paidAmount" inputmode="numeric" oninput="calculateTotal()" placeholder="Paid Amount">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <input type="number" class="form-control" id="balanceAmount" name="balanceAmount" inputmode="numeric" oninput="calculateTotal()" placeholder="Balance Amount">
-            </div>
-            <div class="col-md-6">
-                <select class="form-select" id="side" name="side">
-                    <option value="" disabled selected>Select Side</option>
-                    <option value="Kalyan">Kalyan</option>
-                    <option value="Srikanth">Srikanth</option>
-                </select>
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="paidAmount" name="paidAmount" inputmode="numeric" oninput="calculateTotal()" placeholder="Paid Amount">
+                    <label for="paidAmount">Paid Amount</label>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row g-3 mb-3">
             <div class="col-md-6">
-                <input type="number" class="form-control" id="powerBill" name="powerBill" inputmode="numeric" placeholder="Power Bill">
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="balanceAmount" name="balanceAmount" inputmode="numeric" oninput="calculateTotal()" placeholder="Balance Amount">
+                    <label for="balanceAmount">Balance Amount</label>
+                </div>
             </div>
             <div class="col-md-6">
-                <input type="number" class="form-control" id="waterBill" name="waterBill" inputmode="numeric" oninput="calculateTotal()" placeholder="Water Bill">
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="powerBill" name="powerBill" inputmode="numeric" placeholder="Power Bill">
+                    <label for="powerBill">Power Bill</label>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="waterBill" name="waterBill" inputmode="numeric" oninput="calculateTotal()" placeholder="Water Bill">
+                    <label for="waterBill">Water Bill</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="totalPaid" name="totalPaid" placeholder="Total Paid" readonly>
+                    <label for="totalPaid">Total Paid</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
             <div class="col-12">
-                <input type="text" class="form-control" id="totalPaid" name="totalPaid" placeholder="Total Paid" readonly>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <textarea class="form-control" id="remarks" name="remarks" rows="3" placeholder="Remarks"></textarea>
+                <div class="form-floating">
+                    <textarea class="form-control" id="remarks" name="remarks" style="height: 100px" placeholder="Remarks"></textarea>
+                    <label for="remarks">Remarks</label>
+                </div>
             </div>
         </div>
         <div class="row mt-3">
