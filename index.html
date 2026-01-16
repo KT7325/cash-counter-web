@@ -34,6 +34,52 @@
             position: relative;
         }
 
+        #app-content {
+            display: none; /* Hidden by default */
+        }
+
+        #auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #auth-container p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        #pin-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        #pin-input {
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--text-dim);
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .auth-button {
+            background: var(--primary);
+            color: var(--text-light);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
         /* Animated Background */
         .bg-animation {
             position: fixed;
@@ -281,81 +327,93 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <header>
-        <div class="brand">
-            <img src="root/logo.png" alt="Logo" class="logo-img">
-            <div>
-                <h1>Hola KT</h1>
-                <p>Developed by Kalyan Thammineni</p>
-            </div>
+    <div id="auth-container">
+        <p>Please authenticate to continue...</p>
+        <button id="try-pin-button" class="auth-button">Try PIN Instead</button>
+        <div id="pin-container">
+            <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
+            <button id="pin-submit-button" class="auth-button">Submit PIN</button>
         </div>
-    </header>
-
-    <div class="container">
-        <!-- Denominations -->
-        <a href="denomination/denominations.html" class="card card-deno">
-            <div class="icon-box">
-                <i class="fa-solid fa-calculator"></i>
-            </div>
-            <div class="card-content">
-                <h2>Denominations</h2>
-                <p>Calculate and track currency breakdown.</p>
-            </div>
-            <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <!-- Cashew -->
-        <a href="cashew/cashew.html" class="card card-cashew">
-            <div class="icon-box">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-            </div>
-            <div class="card-content">
-                <h2>Cashew</h2>
-                <p>Manage cashew business transactions.</p>
-            </div>
-            <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <!-- MSI -->
-        <a href="msi/msi.html" class="card card-msi">
-            <div class="icon-box">
-                <i class="fa-solid fa-wallet"></i>
-            </div>
-            <div class="card-content">
-                <h2>MSI</h2>
-                <p>Monthly Savings & Investment tracker.</p>
-            </div>
-            <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <!-- Rent -->
-        <a href="rent/tenet.html" class="card card-rent">
-            <div class="icon-box">
-                <i class="fa-solid fa-house"></i>
-            </div>
-            <div class="card-content">
-                <h2>Rent Details</h2>
-                <p>Monitor tenant payments and rental history.</p>
-            </div>
-            <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        </a>
-
-        <!-- Dashboard -->
-        <a href="dashboard.html" class="card card-dash">
-            <div class="icon-box">
-                <i class="fa-solid fa-chart-line"></i>
-            </div>
-            <div class="card-content">
-                <h2>Dashboard</h2>
-                <p>Visual overview of all financial metrics.</p>
-            </div>
-            <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-        </a>
     </div>
 
-    <footer>
-        <p>&copy; 2024 <b>Thammineni Technologies</b>. All rights reserved.</p>
-    </footer>
+    <div id="app-content">
+        <header>
+            <div class="brand">
+                <img src="root/logo.png" alt="Logo" class="logo-img">
+                <div>
+                    <h1>Hola KT</h1>
+                    <p>Developed by Kalyan Thammineni</p>
+                </div>
+            </div>
+        </header>
 
+        <div class="container">
+            <!-- Denominations -->
+            <a href="denomination/denominations.html" class="card card-deno">
+                <div class="icon-box">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Denominations</h2>
+                    <p>Calculate and track currency breakdown.</p>
+                </div>
+                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Cashew -->
+            <a href="cashew/cashew.html" class="card card-cashew">
+                <div class="icon-box">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Cashew</h2>
+                    <p>Manage cashew business transactions.</p>
+                </div>
+                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <!-- MSI -->
+            <a href="msi/msi.html" class="card card-msi">
+                <div class="icon-box">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div class="card-content">
+                    <h2>MSI</h2>
+                    <p>Monthly Savings & Investment tracker.</p>
+                </div>
+                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Rent -->
+            <a href="rent/tenet.html" class="card card-rent">
+                <div class="icon-box">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Rent Details</h2>
+                    <p>Monitor tenant payments and rental history.</p>
+                </div>
+                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Dashboard -->
+            <a href="dashboard.html" class="card card-dash">
+                <div class="icon-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="card-content">
+                    <h2>Dashboard</h2>
+                    <p>Visual overview of all financial metrics.</p>
+                </div>
+                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 <b>Thammineni Technologies</b>. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="auth.js"></script>
 </body>
 </html>
