@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Counter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>KT Apps</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -329,10 +328,9 @@
 
     <div id="auth-container">
         <p>Please authenticate to continue...</p>
-        <button id="try-pin-button" class="auth-button">Try PIN Instead</button>
+        <button id="try-pin-button" class="auth-button">Try PIN</button>
         <div id="pin-container">
-            <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-            <button id="pin-submit-button" class="auth-button">Submit PIN</button>
+            <input type="password" id="pin-input" inputmode="numeric" maxlength="4" placeholder="Enter PIN">
         </div>
     </div>
 
