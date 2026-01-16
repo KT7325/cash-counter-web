@@ -4,51 +4,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Counter & Word Converter</title>
+    <title>Denominations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="../config.js"></script>
     <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b, #0f172a);
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--secondary); bottom: -50px; right: -50px; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--accent); top: 40%; left: 60%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
         footer {
             text-align: center;
             padding: 20px;
-            background-color: var(--bg-cream);
-        }
-
-        footer p {
-            margin: 0;
-            color: var(--text-light);
-            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-dim);
         }
 
         footer b {
-            color: var(--primary-red);
+            color: var(--text-light);
         }
     </style>
 </head>
 
-<body class="bg-gray-100 p-4 md:p-10 font-sans">
+<body class="p-4 md:p-10">
 
-    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto glass-card p-6 rounded-2xl shadow-lg">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <section>
-                <div class="flex justify-between items-center mb-4 border-b-4 border-emerald-500 pb-2">
-                    <h2 class="text-2xl font-bold flex items-center gap-2">
-                        <i class="fa-solid fa-money-bill-1-wave text-emerald-500 text-center"></i>Cash Counter
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                    <h2 class="text-2xl font-bold flex items-center gap-3 text-white">
+                        <i class="fa-solid fa-money-bill-1-wave text-emerald-400"></i>Denominations
                     </h2>
-                    <a href="../index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
+                    <a href="../index.html" class="text-white/70 hover:text-white text-xl transition-colors">
                         <i class="fa-solid fa-house"></i>
                     </a>
                 </div>
                 
                 <div id="notes-container" class="space-y-3">
                     <template id="row-template">
-                        <div class="flex items-center justify-between p-3 rounded-lg border-l-4">
-                            <span class="font-bold text-lg label-text"></span>
+                        <div class="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-colors">
+                            <span class="font-bold text-lg label-text text-white"></span>
                             <div class="flex items-center gap-4">
-                                <input type="number" min="0" value="" placeholder="0" inputmode="numeric" pattern="[0-9]*" class="w-20 p-2 border rounded text-center focus:ring-2 outline-none count-input">
-                                <span class="font-bold text-lg min-w-[60px] text-right row-total">0</span>
+                                <input type="number" min="0" value="" placeholder="0" inputmode="numeric" pattern="[0-9]*" class="w-24 p-2 rounded-lg text-center outline-none count-input input-field font-mono text-lg">
+                                <span class="font-bold text-lg min-w-[80px] text-right row-total text-emerald-400 font-mono">0</span>
                             </div>
                         </div>
                     </template>
@@ -56,70 +124,69 @@
                 
                 <div id="coins-container" class="space-y-3 mt-6 mb-8"></div>
 
-
-
-                <div class="mt-auto bg-gradient-to-r from-emerald-500 to-blue-600 text-white p-8 rounded-2xl shadow-lg">
-                    <div class="mb-4 rounded-lg backdrop-blur-sm flex flex-col gap-3">
-                        <div class="flex justify-center">
-                             <input type="date" id="date-input" class="p-2 px-6 rounded-lg focus:ring-2 outline-none text-gray-700 text-lg font-semibold bg-white shadow-md" />
+                <div class="mt-auto bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative z-10">
+                        <div class="mb-6 flex justify-center">
+                             <input type="date" id="date-input" class="p-2 px-6 rounded-lg outline-none text-white text-lg font-semibold bg-white/20 border border-white/20 backdrop-blur-sm shadow-inner text-center" />
                         </div>
-                    </div>
 
-                    <div class="text-xl flex justify-center items-center gap-2 mb-2 text-white/90 font-semibold mt-2">
-                     Total Amount
-                    </div>
-                    <div id="grand-total" class="text-5xl font-black mb-4 text-center w-full">0</div>
+                        <div class="text-xl flex justify-center items-center gap-2 mb-2 text-white/80 font-medium">
+                            Total Amount
+                        </div>
+                        <div id="grand-total" class="text-5xl font-bold mb-6 text-center w-full tracking-tight">0</div>
 
-                    <div class="pt-4 border-t border-white/20">
-                        <span class="text-sm tracking-widest opacity-80 font-bold text-white">In Words:</span>
-                        <div id="total-in-words" class="text-lg font-medium italic mt-1 capitalize leading-tight"></div>
+                        <div class="pt-4 border-t border-white/20 text-center">
+                            <span class="text-xs tracking-widest opacity-70 font-bold uppercase">In Words</span>
+                            <div id="total-in-words" class="text-lg font-medium italic mt-1 capitalize leading-tight text-white/90"></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- New Fields Block -->
-                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mb-6 shadow-sm mt-8">
-                    <h3 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-pen-to-square text-emerald-500"></i> Additional Details
+                <div class="glass-card p-6 rounded-xl mt-8">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-emerald-400"></i> Additional Details
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Week Expenses</label>
-                            <input type="number" id="week-expenses-input" placeholder="0.00" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-white shadow-sm" />
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Week Expenses</label>
+                            <input type="number" id="week-expenses-input" placeholder="0.00" class="w-full p-3 rounded-lg outline-none transition input-field" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Adjust Amount</label>
-                            <input type="number" id="adjust-amount-input" placeholder="0.00" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-white shadow-sm" />
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Adjust Amount</label>
+                            <input type="number" id="adjust-amount-input" placeholder="0.00" class="w-full p-3 rounded-lg outline-none transition input-field" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">ATM Withdrawal</label>
-                            <input type="number" id="atm-withdrawal-input" placeholder="0.00" inputmode="numeric" pattern="[0-9]*" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-white shadow-sm" />
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">ATM Withdrawal</label>
+                            <input type="number" id="atm-withdrawal-input" placeholder="0.00" inputmode="numeric" pattern="[0-9]*" class="w-full p-3 rounded-lg outline-none transition input-field" />
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">A/C Paid</label>
-                            <input type="number" id="ac-paid-input" placeholder="0.00" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-white shadow-sm" />
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">A/C Paid</label>
+                            <input type="number" id="ac-paid-input" placeholder="0.00" class="w-full p-3 rounded-lg outline-none transition input-field" />
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Remarks</label>
-                            <input type="text" id="remarks-input" placeholder="Enter remarks..." class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none transition bg-white shadow-sm" />
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Remarks</label>
+                            <input type="text" id="remarks-input" placeholder="Enter remarks..." class="w-full p-3 rounded-lg outline-none transition input-field" />
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-between gap-4 mt-6">
-                    <button onclick="clearAll()" class="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-trash"></i> Clear All
+                <div class="flex justify-between gap-4 mt-8">
+                    <button onclick="clearAll()" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition w-full">
+                        <i class="fa-solid fa-trash"></i> Clear
                     </button>
-                    <button onclick="saveData()" id="save-btn" class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-floppy-disk"></i> Done
+                    <button onclick="saveData()" id="save-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition w-full shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-floppy-disk"></i> Save
                     </button>
                 </div>
                 
-                <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4">
+                <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
+                    <div class="glass-card p-8 rounded-2xl flex flex-col items-center gap-4">
                         <div class="animate-spin">
-                            <i class="fa-solid fa-spinner text-4xl text-green-500"></i>
+                            <i class="fa-solid fa-circle-notch text-4xl text-emerald-400"></i>
                         </div>
-                        <p class="text-gray-700 font-semibold">(S) Processing data...</p>
+                        <p class="text-white font-semibold">Processing...</p>
                     </div>
                 </div>
             </section>
@@ -130,40 +197,40 @@
         const denominations = {
             notes: [{
                     val: 500,
-                    color: 'border-blue-500 bg-blue-50 text-blue-700'
+                    color: '' // Colors handled by CSS now
                 },
                 {
                     val: 200,
-                    color: 'border-orange-500 bg-orange-50 text-orange-700'
+                    color: ''
                 },
                 {
                     val: 100,
-                    color: 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                    color: ''
                 },
                 {
                     val: 50,
-                    color: 'border-pink-500 bg-pink-50 text-pink-700'
+                    color: ''
                 },
                 {
                     val: 20,
-                    color: 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                    color: ''
                 },
                 {
                     val: 10,
-                    color: 'border-red-500 bg-red-50 text-red-700'
+                    color: ''
                 }
             ],
             coins: [{
                     val: 5,
-                    color: 'border-slate-400 bg-orange-50 text-slate-700'
+                    color: ''
                 },
                 {
                     val: 2,
-                    color: 'border-slate-300 bg-blue-50 text-slate-700'
+                    color: ''
                 },
                 {
                     val: 1,
-                    color: 'border-slate-200 bg-pink-50 text-slate-700'
+                    color: ''
                 }
             ]
         };
@@ -239,8 +306,7 @@
 
             list.forEach(item => {
                 const clone = template.content.cloneNode(true);
-                const wrapper = clone.querySelector('div');
-                wrapper.className += ` ${item.color}`;
+                // Removed specific color classes logic as we use a unified dark theme now
                 clone.querySelector('.label-text').textContent = suffix ? `${item.val} ${suffix}` : `${item.val}`;
 
                 const input = clone.querySelector('.count-input');
@@ -446,5 +512,4 @@
         <p>&copy; 2024 <b>Thammineni Technologies</b>. All rights reserved.</p>
     </footer>
 </body>
-
 </html>

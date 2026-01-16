@@ -4,658 +4,884 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSI Report</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --primary-red: #ff3b5c;
-            --bg-cream: #fff9f4;
-            --text-dark: #333;
-            --text-light: #777;
-            --card-bg: #fff;
-            --border-color: #e0e0e0;
-            --chart-color-1: #ff6384;
-            --chart-color-2: #36a2eb;
-            --chart-color-3: #ffce56;
-            --chart-color-4: #4bc0c0;
-            --chart-color-5: #9966ff;
+            --bg-body: #09090b;
+            --bg-card: #18181b;
+            --bg-card-hover: #27272a;
+
+            --primary: #0ea5e9; /* Sky Blue */
+            --primary-glow: rgba(14, 165, 233, 0.5);
+
+            --accent-1: #06b6d4; /* Cyan */
+            --accent-2: #f43f5e; /* Rose */
+            --accent-3: #10b981; /* Emerald */
+
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+
+            --border: #27272a;
+            --radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
             margin: 0;
-            background-color: var(--bg-cream);
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
             min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.08), transparent 25%);
         }
 
-        /* Header */
-        header {
-            padding: 20px 5%;
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        /* Navbar */
+        .navbar {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .header-left {
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.5rem;
         }
 
-        .back-btn, .home-btn {
-            color: var(--text-dark);
-            font-size: 20px;
-            text-decoration: none;
-            transition: color 0.3s;
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        .back-btn:hover, .home-btn:hover {
-            color: var(--primary-red);
-            background-color: var(--bg-cream);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-        h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .icon-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            transform: translateY(-2px);
+        }
 
-        /* Main Content */
+        /* Main Layout */
         .container {
-            padding: 30px 5%;
-            max-width: 100%; /* Full width for large table */
+            max-width: 1400px;
             margin: 0 auto;
-            box-sizing: border-box;
-            flex: 1;
+            padding: 0 2rem 2rem;
         }
 
-        /* Dashboard Grid */
-        .dashboard-grid {
+        /* Hero Section */
+        .hero-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .chart-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid transparent;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .balance-card {
+            background: linear-gradient(145deg, var(--bg-card), #131316);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        .chart-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            opacity: 0.4;
+            filter: blur(40px);
         }
 
-        .chart-card h3 {
-            margin-top: 0;
-            color: var(--text-dark);
-            font-size: 16px;
-            border-bottom: 2px solid var(--bg-cream);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        .balance-label {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .balance-meta {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .trend-up { color: var(--accent-3); }
+
+        /* Controls Card (Tabs + Month Nav) */
+        .controls-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem;
+            border-radius: 16px;
+            width: fit-content;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Month Nav */
+        .month-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            gap: 1rem;
         }
 
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
+        /* Content Views */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
         }
 
-        /* Stats Cards */
-        .stats-row {
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Overview Header (Invested Block) */
+        .overview-header {
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
         }
 
-        .stat-card {
-            flex: 1;
-            min-width: 200px;
-            background: linear-gradient(135deg, #ff3b5c, #ff6b81);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 59, 92, 0.3);
+        /* Platform Cards (Grid View) */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .platform-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .pc-header {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
 
-        .stat-card.secondary {
-            background: linear-gradient(135deg, #333, #555);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .stat-card .label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .stat-card .trend {
-            font-size: 12px;
-            margin-top: 5px;
+        .pc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            font-size: 1.5rem;
         }
 
-        /* Table Section */
+        .pc-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .pc-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pc-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+
+        .pc-item:last-child { border-bottom: none; }
+        .pc-item span:first-child { color: var(--text-muted); }
+
+        /* Table View */
         .table-container {
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             overflow: hidden;
-            margin-top: 30px;
-            position: relative;
         }
 
-        .table-header {
-            padding: 20px 25px;
-            background-color: #fff;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-header h3 { margin: 0; }
-
-        .table-responsive {
+        .table-wrapper {
             overflow-x: auto;
-            max-width: 100%;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            min-width: max-content;
+            border-collapse: collapse;
+            font-size: 0.9rem;
         }
 
         th, td {
-            padding: 12px 15px;
-            text-align: right; /* Numbers align right */
-            border-bottom: 1px solid var(--bg-cream);
-            border-right: 1px solid #f0f0f0;
-            font-size: 13px;
+            padding: 1rem 1.5rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
         }
 
         th {
-            background-color: #fafafa;
-            color: var(--text-light);
-            font-weight: 600;
+            background: #202024;
+            color: var(--text-muted);
+            font-weight: 500;
             text-transform: uppercase;
-            text-align: center;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
         }
 
-        /* Sticky Columns */
-        th.sticky-col, td.sticky-col {
+        th:first-child, td:first-child {
+            text-align: left;
             position: sticky;
             left: 0;
-            background-color: #fff;
+            background: var(--bg-card);
             z-index: 10;
-            border-right: 2px solid #e0e0e0;
-            text-align: left;
-        }
-        th.sticky-col {
-            z-index: 11;
-            background-color: #fafafa;
+            border-right: 1px solid var(--border);
         }
 
-        /* Group Headers */
-        .group-header {
-            border-bottom: 2px solid #e0e0e0;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .nj-header { background-color: #ffebee !important; color: #c62828; }
-        .coin-header { background-color: #e3f2fd !important; color: #1565c0; }
-        .groww-header { background-color: #fff8e1 !important; color: #f9a825; }
-        .govt-header { background-color: #e0f2f1 !important; color: #00695c; }
+        th:first-child { background: #202024; z-index: 20; }
 
-        /* Column Sub-headers */
-        .th-coin { background-color: #f1f9ff !important; color: #1565c0; border-bottom: 2px solid #90caf9 !important; }
-        .th-groww { background-color: #fffdeb !important; color: #e65100; border-bottom: 2px solid #ffe082 !important; }
-        .th-govt { background-color: #e0f7fa !important; color: #00695c; border-bottom: 2px solid #80cbc4 !important; }
-        .th-nj { background-color: #ffebee !important; color: #c62828; border-bottom: 2px solid #ef9a9a !important; }
-
-        tr:last-child td { border-bottom: none; }
-
-        tbody tr:nth-child(even) {
-            background-color: rgba(0, 0, 0, 0.02);
+        tbody tr:hover td {
+            background: rgba(255,255,255,0.02);
         }
 
-        tr:hover td {
-            background-color: var(--bg-cream);
-        }
-        tr:hover td.sticky-col {
-            background-color: var(--bg-cream);
+        .val-positive { color: var(--text-main); }
+        .val-zero { color: #52525b; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .balance-amount { font-size: 3rem; }
         }
 
-        .currency {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: 600;
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem; }
+            .container { padding: 1rem; }
+            .balance-card { padding: 1.5rem; }
+            .balance-amount { font-size: 2.5rem; }
+            .tabs { width: 100%; overflow-x: auto; }
+            .controls-card { padding: 1rem; }
         }
 
-        .total-col {
-            font-weight: bold;
-            color: var(--primary-red);
-            background-color: #fff9f9;
-        }
-
-        /* Loader Styles */
+        /* Loader */
         #loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
-            display: flex;
+            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: all 0.3s;
+            transition: opacity 0.3s;
         }
-
-        .loader-content {
-            background: white;
+        .spinner-container {
+            background: var(--bg-card);
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
-            border: 1px solid #f3f4f6;
+            border: 1px solid var(--border);
         }
-
-        .spinner-container {
-            position: relative;
-            width: 4rem;
-            height: 4rem;
-        }
-
         .spinner {
-            width: 100%;
-            height: 100%;
-            border: 4px solid #fee2e2; /* red-100 */
-            border-top-color: #ef4444; /* red-500 */
+            width: 64px;
+            height: 64px;
+            border: 4px solid rgba(14, 165, 233, 0.2);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
-        .spinner-container .icon {
+        .spinner-icon {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ef4444;
+            color: var(--primary);
             font-size: 1.25rem;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        #loader p {
-            color: #374151;
+        .spinner-text {
+            color: var(--text-main);
             font-weight: 600;
-            margin: 0;
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: var(--bg-cream);
-            margin-top: auto;
-            border-top: 1px solid rgba(0,0,0,0.05);
-        }
-        footer p { color: var(--text-light); font-size: 14px; margin: 0; }
-        footer b { color: var(--primary-red); }
-
-        @media (max-width: 768px) {
-            .stats-row { flex-direction: column; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     </style>
 </head>
 <body>
 
-<!-- Loader Overlay -->
 <div id="loader">
-    <div class="loader-content">
-        <div class="spinner-container">
+    <div class="spinner-container" style="position: relative; display: flex; flex-direction: column; align-items: center;">
+        <div style="position: relative; display: flex; justify-content: center; align-items: center;">
             <div class="spinner"></div>
-            <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="spinner-icon"><i class="fa-solid fa-bolt"></i></div>
         </div>
-        <p>Fetching...</p>
+        <p class="spinner-text">Fetching...</p>
     </div>
 </div>
 
-<!-- Header -->
-<header>
-    <div class="header-left">
-        <a href="msi.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <h1>Investment Dashboard</h1>
+<nav class="navbar">
+    <a href="#" class="brand">
+        <i class="fa-solid fa-atom" style="color: var(--primary);"></i>
+        <span>MSI<span style="font-weight: 300;"> Report</span></span>
+    </a>
+    <div class="nav-actions">
+        <a href="msi.html" class="icon-btn" title="Back"><i class="fa-solid fa-arrow-left"></i></a>
+        <button class="icon-btn" onclick="fetchData()" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+        <a href="../index.html" class="icon-btn" title="Home"><i class="fa-solid fa-house"></i></a>
     </div>
-    <a href="../index.html" class="home-btn"><i class="fa-solid fa-house"></i></a>
-</header>
+</nav>
 
 <div class="container">
 
-    <!-- Stats Row -->
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="label">Total Investment (All Time)</div>
-            <div class="value" id="total-all-time">₹0.00</div>
-            <div class="trend"><i class="fa-solid fa-chart-line"></i> Cumulative</div>
+    <!-- Hero -->
+    <div class="hero-grid">
+        <!-- Net Worth -->
+        <div class="balance-card">
+            <div class="balance-label">
+                Total Investments
+                <button onclick="toggleNetWorth()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; margin-left: 0.5rem;">
+                    <i class="fa-solid fa-eye" id="eye-icon"></i>
+                </button>
+            </div>
+            <div class="balance-amount" id="total-value">****</div>
         </div>
-        <div class="stat-card secondary">
-            <div class="label">Last Month Investment</div>
-            <div class="value" id="last-month-total">₹0.00</div>
-            <div class="trend" id="last-month-date"><i class="fa-regular fa-calendar"></i> -</div>
+
+        <!-- Controls (Tabs + Month Nav) -->
+        <div class="controls-card">
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('overview', this)">This Month</button>
+                <button class="tab-btn" onclick="switchTab('total', this)">All</button>
+                <button class="tab-btn" onclick="switchTab('history', this)">Transaction History</button>
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center;">
+                <!-- Month Navigation -->
+                <div class="month-nav">
+                    <button class="icon-btn" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="current-month-display" style="font-weight: 600; min-width: 90px; text-align: center;">-</span>
+                    <button class="icon-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <!-- Invested Card (Moved from Overview Header) -->
+                <div class="meta-item">
+                    <i class="fa-solid fa-coins" style="color: var(--primary);"></i>
+                    <span id="current-month-total" style="font-weight: 600;">Rs. 0</span>
+                    <span style="color: var(--text-muted); font-size: 0.8em;">Invested</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Data Table -->
-    <div class="table-container">
-        <div class="table-header">
-            <h3>Detailed Investment History</h3>
-            <button onclick="fetchData()" style="background:none; border:none; cursor:pointer; color:var(--primary-red);"><i class="fa-solid fa-sync"></i> Refresh</button>
-        </div>
-        <div class="table-responsive">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="sticky-col">Date</th>
-                        <th rowspan="2" class="total-col">Total</th>
-                        <th colspan="7" class="group-header coin-header">Coin</th>
-                        <th colspan="4" class="group-header groww-header">Groww</th>
-                        <th colspan="4" class="group-header govt-header">Govt Schemes</th>
-                        <th colspan="5" class="group-header nj-header">NJ Wealth</th>
-                    </tr>
-                    <tr>
-                        <!-- Coin -->
-                        <th class="th-coin">Quantum</th>
-                        <th class="th-coin">Navi</th>
-                        <th class="th-coin">Invesco S</th>
-                        <th class="th-coin">Axis N</th>
-                        <th class="th-coin">Birla N</th>
-                        <th class="th-coin">DSP N</th>
-                        <th class="th-coin">Edelweiss</th>
-                        <!-- Groww -->
-                        <th class="th-groww">Canara</th>
-                        <th class="th-groww">Quant</th>
-                        <th class="th-groww">Birla PSU</th>
-                        <th class="th-groww">PowerGrid</th>
-                        <!-- Govt -->
-                        <th class="th-govt">NPS T1</th>
-                        <th class="th-govt">NPS T2</th>
-                        <th class="th-govt">SSA</th>
-                        <th class="th-govt">PPF</th>
-                        <!-- NJ -->
-                        <th class="th-nj">Axis Mid</th>
-                        <th class="th-nj">DSP Mid</th>
-                        <th class="th-nj">Invesco</th>
-                        <th class="th-nj">Kotak</th>
-                        <th class="th-nj">Nippon</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be populated here -->
-                </tbody>
-            </table>
+    <!-- View: Overview (Cards - Monthly) -->
+    <div id="view-overview" class="view-section active">
+        <!-- Overview Header Removed -->
+
+        <div class="platform-grid" id="platform-grid">
+            <!-- Injected via JS -->
         </div>
     </div>
+
+    <!-- View: Overview Total (Cards - All Time) -->
+    <div id="view-total" class="view-section">
+        <div class="platform-grid" id="total-grid">
+            <!-- Injected via JS -->
+        </div>
+    </div>
+
+    <!-- View: History (Table) -->
+    <div id="view-history" class="view-section">
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th style="color: var(--primary);">Total</th>
+                            <!-- Dynamic Headers -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic Body -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<footer>
-    <p>&copy; 2024 <b>Thammineni Technologies</b>. All rights reserved.</p>
-</footer>
 <script src="../config.js"></script>
 <script>
     // Configuration
     const SCRIPT_URL = CONFIG.GOOGLE_SHEET_URL_MSI;
 
-    // Field Definitions
-    const FIELDS = {
-        common: ['month', 'year', 'total_investment'],
-        nj: ['axis_midcap', 'dsp_midcap', 'invesco_midcap', 'kotak_emerging', 'nippon_growth'],
-        coin: ['quantum_liquid', 'navi_nifty', 'invesco_small', 'axis_nifty', 'birla_nifty', 'dsp_nifty', 'edelweiss_bond'],
-        groww: ['canara_small', 'quant_small', 'birla_psu', 'power_grid'],
-        govt: ['nps_tier1', 'nps_tier2', 'ssa', 'ppf']
+    // Platform Config
+    const PLATFORMS = {
+        coin: { name: 'Zerodha Coin', icon: 'fa-solid fa-coins', color: '#3b82f6', fields: ['quantum_liquid', 'navi_nifty', 'invesco_small', 'axis_nifty', 'birla_nifty', 'dsp_nifty', 'edelweiss_bond'] },
+        groww: { name: 'Groww', icon: 'fa-solid fa-seedling', color: '#10b981', fields: ['canara_small', 'quant_small', 'birla_psu', 'power_grid'] },
+        govt: { name: 'Govt. Schemes', icon: 'fa-solid fa-landmark', color: '#f59e0b', fields: ['ppf', 'ssa', 'nps_tier1', 'nps_tier2'] },
+        nj: { name: 'NJ Wealth', icon: 'fa-solid fa-briefcase', color: '#ef4444', fields: ['axis_midcap', 'dsp_midcap', 'invesco_midcap', 'kotak_emerging', 'nippon_growth'] }
     };
 
-    // State
-    let rawData = [];
+    const PALETTE = [
+        '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+        '#ec4899', '#06b6d4', '#84cc16', '#eab308', '#f97316',
+        '#6366f1', '#14b8a6', '#d946ef', '#f43f5e', '#a855f7',
+        '#22c55e', '#0ea5e9', '#facc15', '#fb7185', '#c084fc'
+    ];
 
-    // Format Currency
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-IN', {
-            style: 'currency',
-            currency: 'INR',
-            maximumFractionDigits: 0
-        }).format(amount);
+    // Assign unique color to each field
+    const FIELD_COLORS = {};
+    let colorIdx = 0;
+    Object.values(PLATFORMS).forEach(p => {
+        p.fields.forEach(f => {
+            FIELD_COLORS[f] = PALETTE[colorIdx % PALETTE.length];
+            colorIdx++;
+        });
+    });
+
+    const BANK_FIELDS = ['hdfc_bank', 'sbi_bank', 'icici_bank', 'axis_bank'];
+    const COMMON_FIELDS = ['month', 'year', 'total_investment'];
+    let globalData = [];
+    let currentMonthIndex = -1;
+    let currentTotalNetWorth = 0;
+    let isNetWorthVisible = false;
+
+    // Utils
+    const formatCurrency = (val) => 'Rs. ' + new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(val);
+    const formatNum = (val) => val ? new Intl.NumberFormat('en-IN').format(val) : '-';
+
+    // Tab Switcher
+    window.switchTab = (tabName, el) => {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById(`view-${tabName}`).classList.add('active');
     };
 
-    // Format Compact Currency for Table (e.g. 1.2k) - Optional, but full numbers are better for details
-    const formatNumber = (amount) => {
-        if (!amount) return '-';
-        return new Intl.NumberFormat('en-IN', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount);
+    // Month Navigation
+    window.changeMonth = (delta) => {
+        if (currentMonthIndex === -1) return;
+        const newIndex = currentMonthIndex + delta;
+        if (newIndex >= 0 && newIndex < globalData.length) {
+            currentMonthIndex = newIndex;
+            renderOverview();
+        }
     };
 
-    // Fetch Data
+    function toggleNetWorth() {
+        isNetWorthVisible = !isNetWorthVisible;
+        updateNetWorthDisplay();
+    }
+
+    function updateNetWorthDisplay() {
+        const el = document.getElementById('total-value');
+        const icon = document.getElementById('eye-icon');
+        if (isNetWorthVisible) {
+            el.textContent = formatCurrency(currentTotalNetWorth);
+            icon.className = 'fa-solid fa-eye-slash';
+        } else {
+            el.textContent = '****';
+            icon.className = 'fa-solid fa-eye';
+        }
+    }
+
+    // Fetch
     async function fetchData() {
-        const loading = document.getElementById('loader');
-        loading.style.display = 'flex';
+        const loader = document.getElementById('loader');
+        loader.style.display = 'flex'; // Show loader
 
         try {
-            // Add timestamp to prevent caching
-            const response = await fetch(`${SCRIPT_URL}?v=${new Date().getTime()}`);
+            const res = await fetch(`${SCRIPT_URL}?v=${Date.now()}`);
+            let data = await res.json();
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (data.data) data = data.data;
+            else if (data.records) data = data.records;
+            else if (data.result) data = data.result;
 
-            let data = await response.json();
-            console.log('Fetched Data (Raw):', data);
+            if (!Array.isArray(data)) throw new Error("Invalid Data");
 
-            // Handle potential response wrappers
-            if (data && !Array.isArray(data)) {
-                if (Array.isArray(data.data)) {
-                    data = data.data;
-                } else if (Array.isArray(data.records)) {
-                    data = data.records;
-                } else if (data.result && Array.isArray(data.result)) {
-                    data = data.result;
-                }
-            }
-
-            if (data && data.error) {
-                throw new Error(data.error);
-            }
-
-            if (!Array.isArray(data)) {
-                throw new Error('Received data is not a list. Check console for format.');
-            }
-
-            rawData = data;
             processData(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            alert('Failed to load data: ' + error.message);
+        } catch (e) {
+            console.error(e);
+            alert("Sync Failed: " + e.message);
         } finally {
-            loading.style.display = 'none';
+            setTimeout(() => {
+                loader.style.display = 'none'; // Hide loader
+            }, 600);
         }
     }
 
     function processData(data) {
-        if (!data || !Array.isArray(data)) {
-            console.warn('Invalid data received', data);
-            return;
-        }
-        
-        // Debug: Log available keys to help troubleshooting
-        if (data.length > 0) {
-            console.log('Available Sheet Headers:', Object.keys(data[0]));
-        }
-
-        // Normalize Data Keys
-        const normalizedData = data.map(row => {
+        const allFields = [...COMMON_FIELDS, ...BANK_FIELDS, ...Object.values(PLATFORMS).flatMap(p => p.fields)];
+        const normalized = data.map(row => {
             const newRow = {};
             const rowKeys = Object.keys(row);
 
-            // Helper to find value with fuzzy matching
             const findValue = (targetKey) => {
                 // 1. Exact match
                 if (row[targetKey] !== undefined) return row[targetKey];
 
-                // 2. Case insensitive match
                 const lowerTarget = targetKey.toLowerCase();
+
+                // 2. Case-insensitive match
                 let foundKey = rowKeys.find(k => k.toLowerCase() === lowerTarget);
                 if (foundKey) return row[foundKey];
 
-                // 3. Fuzzy match (remove special chars)
+                // 3. Stripped match (ignore special chars)
                 const strippedTarget = lowerTarget.replace(/[^a-z0-9]/g, '');
                 foundKey = rowKeys.find(k => k.toLowerCase().replace(/[^a-z0-9]/g, '') === strippedTarget);
                 if (foundKey) return row[foundKey];
 
-                // 4. Tokenized match (Split target by '_' and ensure ALL parts exist in the row key)
-                // e.g. "canara_small" -> matches "Canara Robeco Small Cap" (contains 'canara' and 'small')
-                const targetParts = lowerTarget.split('_').filter(p => p);
-                foundKey = rowKeys.find(k => {
-                    const cleanKey = k.toLowerCase();
-                    return targetParts.every(part => cleanKey.includes(part));
-                });
-                if (foundKey) return row[foundKey];
+                // 4. Tokenized/Partial match (aggressive)
+                const parts = lowerTarget.split('_').filter(p => p.length > 2);
+                if (parts.length > 0) {
+                    foundKey = rowKeys.find(k => {
+                        const cleanKey = k.toLowerCase();
+                        return parts.every(part => cleanKey.includes(part));
+                    });
+                    if (foundKey) return row[foundKey];
+                }
 
                 return undefined;
             };
 
-            // Map all expected fields
-            [...FIELDS.common, ...FIELDS.coin, ...FIELDS.groww, ...FIELDS.govt, ...FIELDS.nj].forEach(field => {
+            allFields.forEach(field => {
                 newRow[field] = findValue(field);
             });
-
             return newRow;
-        });
+        }).filter(d => d.month && d.year);
 
-        // Filter out empty rows if any
-        const validData = normalizedData.filter(d => d.month || d.year || d.total_investment);
-
-        // Sort data by year and month
         const monthMap = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
+        normalized.sort((a, b) => (Number(a.year) * 100 + monthMap[a.month]) - (Number(b.year) * 100 + monthMap[b.month]));
 
-        validData.sort((a, b) => {
-            const yearA = Number(a.year) || 0;
-            const yearB = Number(b.year) || 0;
-            const monthA = monthMap[a.month] !== undefined ? monthMap[a.month] : -1;
-            const monthB = monthMap[b.month] !== undefined ? monthMap[b.month] : -1;
-
-            if (yearA !== yearB) return yearA - yearB;
-            return monthA - monthB;
-        });
-
-        updateStats(validData);
-        updateTable(validData);
+        globalData = normalized;
+        renderUI();
     }
 
-    function updateStats(data) {
-        if (!data || data.length === 0) {
-             document.getElementById('total-all-time').textContent = formatCurrency(0);
-             document.getElementById('last-month-total').textContent = formatCurrency(0);
-             document.getElementById('last-month-date').innerHTML = `<i class="fa-regular fa-calendar"></i> -`;
-             return;
-        }
+    function renderUI() {
+        if (!globalData.length) return;
 
-        // Calculate totals
+        // Calculate Totals Dynamically
         let totalAllTime = 0;
-        data.forEach(row => {
-            totalAllTime += Number(row.total_investment) || 0;
+        globalData.forEach(row => {
+            // Sum up all platform fields for this row
+            let rowTotal = 0;
+            Object.values(PLATFORMS).forEach(p => {
+                p.fields.forEach(f => rowTotal += (Number(row[f]) || 0));
+            });
+            // Add bank fields if they are considered part of "Investment" or "Net Worth"
+            // Assuming Net Worth includes Banks + Investments
+            BANK_FIELDS.forEach(f => rowTotal += (Number(row[f]) || 0));
+
+            totalAllTime += rowTotal;
+            row.calculated_total = rowTotal; // Store for table use if needed
         });
 
-        const lastRecord = data[data.length - 1];
-        const lastMonthTotal = Number(lastRecord.total_investment) || 0;
+        const lastRec = globalData[globalData.length - 1];
 
-        document.getElementById('total-all-time').textContent = formatCurrency(totalAllTime);
-        document.getElementById('last-month-total').textContent = formatCurrency(lastMonthTotal);
-        document.getElementById('last-month-date').innerHTML = `<i class="fa-regular fa-calendar"></i> ${lastRecord.month || '-'} ${lastRecord.year || '-'}`;
+        // Calculate Last Month Total (Investments + Banks)
+        let lastMonthTotal = 0;
+        Object.values(PLATFORMS).forEach(p => {
+            p.fields.forEach(f => lastMonthTotal += (Number(lastRec[f]) || 0));
+        });
+        BANK_FIELDS.forEach(f => lastMonthTotal += (Number(lastRec[f]) || 0));
+
+        currentTotalNetWorth = totalAllTime;
+        updateNetWorthDisplay();
+
+        // document.getElementById('last-month-val').textContent = formatCurrency(lastMonthTotal);
+        // document.getElementById('record-count').textContent = globalData.length;
+
+        // Reset to latest month on new data
+        currentMonthIndex = globalData.length - 1;
+
+        // renderBankBalances(lastRec); // Removed Bank Balances
+        renderOverview();
+        renderTotalCards();
+        renderTable();
     }
 
-    function updateTable(data) {
+    function renderOverview() {
+        if (currentMonthIndex === -1 || !globalData[currentMonthIndex]) return;
+        const data = globalData[currentMonthIndex];
+        const label = `${data.month} ${data.year}`;
+        document.getElementById('current-month-display').textContent = label;
+
+        // Calculate Total for displayed platforms
+        let monthTotal = 0;
+        Object.values(PLATFORMS).forEach(p => {
+            p.fields.forEach(f => monthTotal += (Number(data[f]) || 0));
+        });
+        document.getElementById('current-month-total').textContent = formatCurrency(monthTotal);
+
+        // Check if it is the last month (current)
+        const isCurrent = currentMonthIndex === globalData.length - 1;
+        const cardLabel = isCurrent ? 'Current Month' : label;
+
+        renderPlatformCards(data, 'platform-grid', cardLabel);
+    }
+
+    /* Removed renderBankBalances function */
+
+    function renderPlatformCards(dataObj, containerId, labelText) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        Object.entries(PLATFORMS).forEach(([key, p]) => {
+            let platformTotal = p.fields.reduce((sum, f) => sum + (Number(dataObj[f]) || 0), 0);
+
+            if (platformTotal === 0) return;
+
+            // Prepare items with key for color lookup
+            let itemsData = p.fields.map(f => ({
+                key: f,
+                name: f.replace(/_/g, ' '),
+                val: Number(dataObj[f]) || 0
+            }));
+
+            // For Govt, use defined order. For others, sort by value.
+            if (key !== 'govt') {
+                itemsData.sort((a,b) => b.val - a.val);
+            }
+
+            const card = document.createElement('div');
+            card.className = 'platform-card';
+            card.innerHTML = `
+                <div class="pc-header">
+                    <div class="pc-icon" style="background: ${p.color}20; color: ${p.color}">
+                        <i class="${p.icon}"></i>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">${labelText}</div>
+                        <div style="font-weight: 700; color: ${p.color};">${formatCurrency(platformTotal)}</div>
+                    </div>
+                </div>
+                <div class="pc-title">${p.name}</div>
+                <ul class="pc-list">
+                    ${itemsData.map(i => `
+                        <li class="pc-item">
+                            <span style="text-transform: ${key === 'govt' ? 'uppercase' : 'capitalize'}; color: ${FIELD_COLORS[i.key] || '#a1a1aa'};">
+                                <i class="fa-solid fa-circle" style="font-size: 0.4em; vertical-align: middle; margin-right: 6px; opacity: 0.7;"></i>
+                                ${i.name}
+                            </span>
+                            <span class="${i.val > 0 ? 'val-positive' : 'val-zero'}">${formatNum(i.val)}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function renderTotalCards() {
+        // Calculate all-time totals for each field
+        const totalData = {};
+
+        // Initialize fields
+        Object.values(PLATFORMS).forEach(p => {
+            p.fields.forEach(f => totalData[f] = 0);
+        });
+
+        // Sum up
+        globalData.forEach(row => {
+            Object.values(PLATFORMS).forEach(p => {
+                p.fields.forEach(f => {
+                    totalData[f] += (Number(row[f]) || 0);
+                });
+            });
+        });
+
+        renderPlatformCards(totalData, 'total-grid', 'All Time Total');
+    }
+
+    function renderTable() {
+        const thead = document.querySelector('#dataTable thead tr');
         const tbody = document.querySelector('#dataTable tbody');
+
+        while (thead.children.length > 2) thead.removeChild(thead.lastChild);
         tbody.innerHTML = '';
 
-        if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="22" style="text-align:center; padding: 20px;">No records found</td></tr>';
-            return;
-        }
+        Object.entries(PLATFORMS).forEach(([key, p]) => {
+            p.fields.forEach((f, index) => {
+                const color = FIELD_COLORS[f];
+                const th = document.createElement('th');
+                th.textContent = f.replace(/_/g, ' ').replace('midcap', 'Mid').replace('small', 'Sml');
+                if (key === 'govt') th.textContent = th.textContent.toUpperCase();
 
-        // Reverse for table (newest first)
-        const reversedData = [...data].reverse();
+                th.style.color = color;
+                th.style.borderBottom = `2px solid ${color}`;
+                th.style.background = `${color}10`;
 
-        reversedData.forEach(row => {
+                if (index === 0) {
+                     th.style.borderLeft = `1px solid ${color}40`;
+                }
+
+                thead.appendChild(th);
+            });
+        });
+
+        [...globalData].reverse().forEach(row => {
             const tr = document.createElement('tr');
 
-            // Build cells for each category
-            const buildCells = (fields) => {
-                return fields.map(field => `<td class="currency">${formatNumber(row[field])}</td>`).join('');
-            };
+            const total = row.calculated_total !== undefined ? row.calculated_total : (Number(row.total_investment) || 0);
 
-            tr.innerHTML = `
-                <td class="sticky-col"><b>${row.month || '-'} ${row.year || '-'}</b></td>
-                <td class="currency total-col">${formatCurrency(row.total_investment || 0)}</td>
-                ${buildCells(FIELDS.coin)}
-                ${buildCells(FIELDS.groww)}
-                ${buildCells(FIELDS.govt)}
-                ${buildCells(FIELDS.nj)}
+            let html = `
+                <td>${row.month} ${row.year}</td>
+                <td style="color: var(--primary); font-weight: 600;">${formatNum(total)}</td>
             `;
+
+            Object.values(PLATFORMS).forEach(p => {
+                p.fields.forEach((f, index) => {
+                    const val = Number(row[f]) || 0;
+                    const color = FIELD_COLORS[f];
+
+                    let style = `background: ${color}05;`;
+                    if (index === 0) {
+                        style += `border-left: 1px solid ${color}20;`;
+                    }
+
+                    const textColor = val > 0 ? color : '#52525b';
+                    style += `color: ${textColor};`;
+
+                    html += `<td style="${style}">${formatNum(val)}</td>`;
+                });
+            });
+
+            tr.innerHTML = html;
             tbody.appendChild(tr);
         });
     }
 
-    // Initial Load
-    document.addEventListener('DOMContentLoaded', fetchData);
-
+    // Removed auto-fetch on DOMContentLoaded
+    // document.addEventListener('DOMContentLoaded', fetchData);
 </script>
 </body>
-</html>

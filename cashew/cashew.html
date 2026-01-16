@@ -6,47 +6,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cashew - Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="../config.js"></script>
     <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b, #0f172a);
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--secondary); bottom: -50px; right: -50px; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--accent); top: 40%; left: 60%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .input-field:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+        }
+
+        select.input-field option {
+            background-color: #1e293b;
+            color: var(--text-light);
+        }
+
         footer {
             text-align: center;
             padding: 20px;
-            background-color: var(--bg-cream);
-        }
-
-        footer p {
-            margin: 0;
-            color: var(--text-light);
-            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-dim);
         }
 
         footer b {
-            color: var(--primary-red);
+            color: var(--text-light);
         }
     </style>
 </head>
 
-<body class="bg-gray-100 p-4 md:p-10 font-sans">
+<body class="p-4 md:p-10">
 
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto glass-card p-6 rounded-2xl shadow-lg">
         <section>
-            <div class="flex justify-between items-center mb-6 border-b-4 border-red-500 pb-2">
-                <h2 class="text-2xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-file-invoice-dollar text-red-500"></i>Cashew
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <h2 class="text-2xl font-bold flex items-center gap-3 text-white">
+                    <i class="fa-solid fa-file-invoice-dollar text-pink-500"></i>Cashew
                 </h2>
-                <a href="../index.html" class="text-gray-500 hover:text-red-500 transition">
-                    <i class="fa-solid fa-home text-xl"></i>
+                <a href="../index.html" class="text-white/70 hover:text-white text-xl transition-colors">
+                    <i class="fa-solid fa-house"></i>
                 </a>
             </div>
 
             <!-- Date Picker & Save Button -->
             <div class="mb-6 flex justify-end items-center gap-3">
-                <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border">
-                    <i class="fa-regular fa-calendar text-gray-500"></i>
-                    <input type="date" id="date-input" class="bg-transparent outline-none text-gray-700 font-semibold" />
+                <div class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/10">
+                    <i class="fa-regular fa-calendar text-pink-400"></i>
+                    <input type="date" id="date-input" class="bg-transparent outline-none text-white font-semibold" />
                 </div>
-                <button onclick="saveData()" id="save-btn" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-bold flex items-center gap-2 transition text-sm shadow-md">
+                <button onclick="saveData()" id="save-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-lg font-bold flex items-center gap-2 transition text-sm shadow-lg shadow-emerald-500/20">
                     <i class="fa-solid fa-floppy-disk"></i> Save
                 </button>
             </div>
@@ -57,32 +130,33 @@
             </div>
 
             <!-- Add Row Button -->
-            <div class="mt-4 text-center">
-                <button onclick="addRow()" class="text-red-500 hover:text-red-700 font-semibold flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded hover:bg-red-50 transition">
+            <div class="mt-6 text-center">
+                <button onclick="addRow()" class="text-pink-400 hover:text-pink-300 font-semibold flex items-center justify-center gap-2 mx-auto py-2 px-4 rounded hover:bg-pink-500/10 transition border border-pink-500/30">
                     <i class="fa-solid fa-plus-circle"></i> Add Row
                 </button>
             </div>
 
             <!-- Total -->
-            <div class="mt-8 bg-gradient-to-r from-red-500 to-pink-600 text-white p-6 rounded-xl shadow-lg">
-                <div class="flex flex-col justify-center items-center">
-                    <span id="total-amount" class="text-4xl font-black text-center">Rs. 0.00</span>
+            <div class="mt-8 bg-gradient-to-r from-pink-600 to-purple-600 text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-black/10"></div>
+                <div class="relative z-10 flex flex-col justify-center items-center">
+                    <span id="total-amount" class="text-4xl font-black text-center tracking-tight">Rs. 0.00</span>
                 </div>
             </div>
 
             <!-- Actions -->
             <div class="flex justify-end gap-4 mt-6">
-                <button onclick="clearAll()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition">
+                <button onclick="clearAll()" class="bg-white/10 hover:bg-white/20 text-white py-2 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition border border-white/10">
                     <i class="fa-solid fa-trash"></i> Clear All
                 </button>
             </div>
 
-            <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4">
+            <div id="loader" class="hidden fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-50">
+                <div class="glass-card p-8 rounded-2xl flex flex-col items-center gap-4">
                     <div class="animate-spin">
-                        <i class="fa-solid fa-spinner text-4xl text-green-500"></i>
+                        <i class="fa-solid fa-circle-notch text-4xl text-pink-500"></i>
                     </div>
-                    <p class="text-gray-700 font-semibold">Saving data...</p>
+                    <p class="text-white font-semibold">Saving data...</p>
                 </div>
             </div>
         </section>
@@ -90,10 +164,10 @@
 
     <!-- Template for Expense Row -->
     <template id="expense-row-template">
-        <div class="expense-row group bg-gray-50 p-3 rounded-lg border border-gray-200 shadow-sm relative">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-2">
+        <div class="expense-row group bg-white/5 p-3 rounded-xl border border-white/10 shadow-sm relative hover:bg-white/10 transition-colors">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-3">
                 <div class="w-full sm:w-auto sm:flex-grow sm:max-w-[60%]">
-                    <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white category-select text-sm font-medium">
+                    <select class="w-full p-2 rounded-lg outline-none category-select text-sm font-medium input-field">
                         <option value="Select">Select Category</option>
                         <option value="Home">Home</option>
                         <option value="My Personal">My Personal</option>
@@ -108,17 +182,18 @@
                 <div class="flex items-center justify-end gap-2 w-full sm:w-auto">
                     <div class="w-32 sm:w-32">
                         <input type="number" step="0.01" placeholder="0.00"
-                            class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-right amount-input font-mono font-bold text-gray-700 shadow-sm"
+                            class="w-full p-2 rounded-lg outline-none text-right amount-input font-mono font-bold text-white shadow-sm input-field"
                             oninput="calculateTotal()">
                     </div>
-                    <button onclick="removeRow(this)" class="text-gray-400 hover:text-red-500 transition">
+                    <button onclick="removeRow(this)" class="text-gray-500 hover:text-red-400 transition w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-500/10">
                         <i class="fa-solid fa-circle-minus text-xl"></i>
                     </button>
                 </div>
             </div>
             <div class="w-full">
                 <input type="text"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none description-input transition shadow-sm bg-white"
+                    class="w-full p-3 rounded-lg outline-none description-input transition shadow-sm input-field placeholder-gray-500"
+                    placeholder="Description (e.g. Groceries 500, Milk 30)"
                     oninput="parseAndCalculate(this)">
             </div>
         </div>

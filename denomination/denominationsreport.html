@@ -6,34 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Denominations Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="../config.js"></script>
     <style>
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: var(--bg-cream);
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --accent: #8b5cf6;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
         }
 
-        footer p {
-            margin: 0;
+        body {
+            background-color: var(--bg-dark);
             color: var(--text-light);
-            font-size: 14px;
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        footer b {
-            color: var(--primary-red);
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b, #0f172a);
+            overflow: hidden;
         }
-        
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--secondary); bottom: -50px; right: -50px; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--accent); top: 40%; left: 60%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
         .accordion-content {
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
             max-height: 0;
             opacity: 0;
             overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         .accordion-content.active {
             opacity: 1;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         .rotate-icon {
@@ -43,29 +87,45 @@
         .rotate-icon.active {
             transform: rotate(180deg);
         }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-dim);
+        }
+
+        footer b {
+            color: var(--text-light);
+        }
     </style>
 </head>
 
-<body class="bg-gray-100 p-4 md:p-10 font-sans">
+<body class="p-4 md:p-10">
+
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
 
     <div class="max-w-4xl mx-auto">
-        <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md sticky top-0 z-10">
-            <h5 class="text-xl font-bold flex items-center gap-2 text-gray-800">
-                <i class="fa-solid fa-chart-pie text-emerald-800"></i> Denominations Report
+        <div class="glass-card flex justify-between items-center mb-6 p-4 rounded-xl sticky top-4 z-10">
+            <h5 class="text-xl font-bold flex items-center gap-3 text-white">
+                <i class="fa-solid fa-chart-pie text-emerald-400"></i> Denominations Report
             </h5>
-            <div class="flex gap-4">
-                <button onclick="fetchData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2 shadow-sm">
+            <div class="flex gap-3">
+                <button onclick="fetchData()" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 w-10 h-10 rounded-full transition flex items-center justify-center shadow-sm">
                     <i class="fa-solid fa-sync"></i>
                 </button>
-                <a href="../index.html" class="text-emerald-500 hover:text-emerald-700 text-2xl">
+                <a href="../index.html" class="bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full transition flex items-center justify-center">
                     <i class="fa-solid fa-house"></i>
                 </a>
             </div>
         </div>
 
-        <!-- Sheet2 Data Display (Centered and Styled) -->
         <div id="sheet2-data-container" class="hidden mb-8 flex justify-center">
-            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 text-center">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-2xl shadow-lg transform hover:scale-105 transition duration-300 text-center">
                 <div class="text-sm font-medium tracking-wider opacity-90 mb-1">Available Balance</div>
                 <div id="sheet2-value" class="text-3xl font-black tracking-tight"></div>
             </div>
@@ -73,7 +133,7 @@
 
         <div id="loader" class="flex justify-center items-center py-20">
             <div class="animate-spin">
-                <i class="fa-solid fa-spinner text-4xl text-emerald-500"></i>
+                <i class="fa-solid fa-circle-notch text-4xl text-emerald-400"></i>
             </div>
         </div>
 
@@ -82,7 +142,7 @@
         </div>
         
         <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-gray-500">
-            <i class="fa-solid fa-clipboard-list text-6xl mb-4 text-gray-300"></i>
+            <i class="fa-solid fa-clipboard-list text-6xl mb-4 text-gray-700"></i>
             <p class="text-xl">No reports found</p>
         </div>
     </div>
@@ -106,7 +166,6 @@
             const date = new Date(dateString);
             if (isNaN(date.getTime())) return '';
 
-            // Adjust for timezone offset to prevent date shifting
             const offset = date.getTimezoneOffset();
             const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
             return adjustedDate.toISOString().split('T')[0];
@@ -147,35 +206,30 @@
         function renderViewMode(contentContainer, data, headerElement) {
             contentContainer.innerHTML = '';
             const innerPadding = document.createElement('div');
-            innerPadding.className = 'p-4';
+            innerPadding.className = 'px-4';
 
-            // Denominations Grid
             const denomsGrid = document.createElement('div');
             denomsGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4 text-sm';
 
             const denoms = [
-                { key: '500', label: '500', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-                { key: '200', label: '200', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
-                { key: '100', label: '100', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-                { key: '50', label: '50', color: 'text-pink-600', bg: 'bg-pink-50', border: 'border-pink-200' },
-                { key: '20', label: '20', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
-                { key: '10', label: '10', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
-                { key: '5', label: '5', color: 'text-slate-600', bg: 'bg-slate-100', border: 'border-slate-200' },
-                { key: '2', label: '2', color: 'text-slate-600', bg: 'bg-slate-100', border: 'border-slate-200' },
-                { key: '1', label: '1', color: 'text-slate-600', bg: 'bg-slate-100', border: 'border-slate-200' }
+                { key: '500', label: '500', color: 'text-blue-300', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
+                { key: '200', label: '200', color: 'text-orange-300', bg: 'bg-orange-500/10', border: 'border-orange-500/20' },
+                { key: '100', label: '100', color: 'text-emerald-300', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
+                { key: '50', label: '50', color: 'text-pink-300', bg: 'bg-pink-500/10', border: 'border-pink-500/20' },
+                { key: '20', label: '20', color: 'text-indigo-300', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20' },
+                { key: '10', label: '10', color: 'text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+                { key: '5', label: '5', color: 'text-slate-300', bg: 'bg-slate-500/10', border: 'border-slate-500/20' },
+                { key: '2', label: '2', color: 'text-slate-300', bg: 'bg-slate-500/10', border: 'border-slate-500/20' },
+                { key: '1', label: '1', color: 'text-slate-300', bg: 'bg-slate-500/10', border: 'border-slate-500/20' }
             ];
 
             denoms.forEach(d => {
-                let value = data[d.key];
-                if (value === undefined || value === null || value === '') {
-                    value = 0;
-                }
-
+                let value = data[d.key] || 0;
                 const item = document.createElement('div');
-                item.className = `${d.bg} ${d.border} border rounded px-3 py-2 flex justify-between items-center`;
+                item.className = `${d.bg} ${d.border} border rounded-lg px-3 py-2 flex justify-between items-center`;
                 item.innerHTML = `
                     <span class="font-bold ${d.color}">₹${d.label}</span>
-                    <span class="font-mono font-semibold text-gray-700">x ${value}</span>
+                    <span class="font-mono font-semibold text-gray-300">x ${value}</span>
                 `;
                 denomsGrid.appendChild(item);
             });
@@ -186,48 +240,26 @@
             innerPadding.appendChild(denomTitle);
             innerPadding.appendChild(denomsGrid);
 
-            // Other Details Grid
             const detailsGrid = document.createElement('div');
-            detailsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm mt-4 pt-4 border-t border-gray-200';
+            detailsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm mt-6 pt-4 border-t border-white/10';
 
-            const fieldOrder = [
-                'Sunday Offerings', 'Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Week Closing Balance', 'Remarks'
-            ];
-
+            const fieldOrder = ['Week Expenses', 'Adjust Amount', 'ATM Withdrawal', 'A/C Paid', 'Remarks'];
             const allKeys = new Set([...fieldOrder, ...Object.keys(data)]);
             const handledKeys = ['Date', 'Total', '500', '200', '100', '50', '20', '10', '5', '2', '1', 'rowIndex'];
-
             let hasOtherDetails = false;
+
             allKeys.forEach(key => {
                 if (handledKeys.includes(key)) return;
-
                 let value = data[key];
-                let shouldDisplay = false;
-
-                if (fieldOrder.includes(key)) {
-                    shouldDisplay = true;
-                    if (value === undefined || value === null || value === '') {
-                        value = (key === 'Remarks') ? '-' : 0;
-                    }
-                } else {
-                    if (data.hasOwnProperty(key) && value !== null && value !== '') {
-                        shouldDisplay = true;
-                    }
-                }
-
-                if (shouldDisplay) {
+                if (data.hasOwnProperty(key) && value !== null && value !== '') {
                     hasOtherDetails = true;
                     const item = document.createElement('div');
-                    item.className = 'bg-white p-3 rounded-lg border border-gray-200';
-
-                    const isCurrencyCandidate = !isNaN(parseFloat(value)) && isFinite(value);
-                    if (isCurrencyCandidate) {
-                        value = formatCurrency(value);
-                    }
-
+                    item.className = 'bg-white/5 p-3 rounded-lg border border-white/10';
+                    const isCurrencyCandidate = !isNaN(parseFloat(value)) && isFinite(value) && key !== 'Remarks';
+                    value = isCurrencyCandidate ? formatCurrency(value) : value;
                     item.innerHTML = `
-                        <div class="text-xs text-gray-500 uppercase font-bold">${key}</div>
-                        <div class="font-semibold text-gray-800">${value}</div>
+                        <div class="text-xs text-gray-400 uppercase font-bold">${key}</div>
+                        <div class="font-semibold text-gray-200">${value}</div>
                     `;
                     detailsGrid.appendChild(item);
                 }
@@ -241,206 +273,36 @@
             setTimeout(() => updateContentHeight(contentContainer), 0);
         }
 
-        function renderEditMode(contentContainer, data, headerElement) {
-            contentContainer.innerHTML = '';
-            const innerPadding = document.createElement('div');
-            innerPadding.className = 'p-4 bg-blue-50 border-t border-blue-100';
-
-            const form = document.createElement('form');
-            form.onsubmit = (e) => {
-                e.preventDefault();
-                updateItem(data.rowIndex, form, contentContainer, data, headerElement);
-            };
-
-            // Date Field
-            const dateWrapper = document.createElement('div');
-            dateWrapper.className = 'mb-4';
-            dateWrapper.innerHTML = `
-                <label class="block text-sm font-bold text-gray-700 mb-1">Date</label>
-                <input type="date" name="date" class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${formatDateForInput(data.Date)}">
-            `;
-            form.appendChild(dateWrapper);
-
-            // Denominations
-            const denomTitle = document.createElement('h4');
-            denomTitle.className = 'text-xs font-bold text-gray-500 uppercase mb-2';
-            denomTitle.textContent = 'Edit Denominations';
-            form.appendChild(denomTitle);
-
-            const denomsGrid = document.createElement('div');
-            denomsGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4';
-
-            const denoms = [500, 200, 100, 50, 20, 10, 5, 2, 1];
-            denoms.forEach(d => {
-                const val = data[d.toString()] || 0;
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <label class="block text-xs text-gray-600 font-semibold">₹${d}</label>
-                    <input type="number" name="d${d}" class="w-full border border-gray-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${val}">
-                `;
-                denomsGrid.appendChild(div);
-            });
-            form.appendChild(denomsGrid);
-
-            // Other Fields
-            const otherTitle = document.createElement('h4');
-            otherTitle.className = 'text-xs font-bold text-gray-500 uppercase mb-2';
-            otherTitle.textContent = 'Other Details';
-            form.appendChild(otherTitle);
-
-            const otherGrid = document.createElement('div');
-            otherGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4';
-
-            const otherFields = [
-                { key: 'Week Expenses', name: 'weekExpenses' },
-                { key: 'Adjust Amount', name: 'adjustAmount' },
-                { key: 'ATM Withdrawal', name: 'atmWithdrawal' },
-                { key: 'A/C Paid', name: 'acPaid' },
-                { key: 'Remarks', name: 'remarks', type: 'text' }
-            ];
-
-            otherFields.forEach(field => {
-                const val = data[field.key] !== undefined ? data[field.key] : '';
-                const type = field.type || 'number';
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <label class="block text-xs text-gray-600 font-semibold">${field.key}</label>
-                    <input type="${type}" name="${field.name}" class="w-full border border-gray-300 rounded p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${val}">
-                `;
-                otherGrid.appendChild(div);
-            });
-            form.appendChild(otherGrid);
-
-            // Buttons
-            const btnContainer = document.createElement('div');
-            btnContainer.className = 'flex justify-end gap-3 mt-4 border-t border-blue-200 pt-4';
-
-            const cancelBtn = document.createElement('button');
-            cancelBtn.type = 'button';
-            cancelBtn.className = 'px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-bold transition';
-            cancelBtn.textContent = 'Cancel';
-            cancelBtn.onclick = () => renderViewMode(contentContainer, data, headerElement);
-
-            const saveBtn = document.createElement('button');
-            saveBtn.type = 'submit';
-            saveBtn.className = 'px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-bold flex items-center gap-2 transition shadow-sm';
-            saveBtn.innerHTML = '<i class="fa-solid fa-save"></i> Update';
-
-            btnContainer.appendChild(cancelBtn);
-            btnContainer.appendChild(saveBtn);
-            form.appendChild(btnContainer);
-
-            innerPadding.appendChild(form);
-            contentContainer.appendChild(innerPadding);
-
-            setTimeout(() => updateContentHeight(contentContainer), 0);
-        }
-
-        function updateItem(rowIndex, form, contentContainer, originalData, headerElement) {
-            const formData = new FormData(form);
-            const updatedData = {
-                action: 'update',
-                rowIndex: rowIndex,
-                date: formData.get('date'),
-                weekExpenses: formData.get('weekExpenses'),
-                adjustAmount: formData.get('adjustAmount'),
-                atmWithdrawal: formData.get('atmWithdrawal'),
-                acPaid: formData.get('acPaid'),
-                remarks: formData.get('remarks')
-            };
-
-            // Denominations and Total
-            const denoms = [500, 200, 100, 50, 20, 10, 5, 2, 1];
-            let total = 0;
-            denoms.forEach(d => {
-                const val = formData.get(`d${d}`);
-                updatedData[`d${d}`] = val;
-                total += (parseInt(val) || 0) * d;
-            });
-            updatedData.total = total;
-
-            const saveBtn = form.querySelector('button[type="submit"]');
-            const originalBtnText = saveBtn.innerHTML;
-            saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
-            saveBtn.disabled = true;
-
-            fetch(CONFIG.GOOGLE_SHEET_URL_DENOMINATIONS, {
-                method: 'POST',
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.result === 'success') {
-                    // Update local data object to reflect changes immediately
-                    originalData.Date = updatedData.date;
-                    originalData.Total = total;
-                    denoms.forEach(d => originalData[d.toString()] = updatedData[`d${d}`]);
-                    originalData['Week Expenses'] = updatedData.weekExpenses;
-                    originalData['Adjust Amount'] = updatedData.adjustAmount;
-                    originalData['ATM Withdrawal'] = updatedData.atmWithdrawal;
-                    originalData['A/C Paid'] = updatedData.acPaid;
-                    originalData['Remarks'] = updatedData.remarks;
-
-                    // Update Header Info (Date and Total)
-                    const dateDiv = headerElement.querySelector('.text-blue-800');
-                    if (dateDiv) dateDiv.textContent = formatDate(updatedData.date);
-
-                    const totalDiv = headerElement.querySelector('.text-green-800');
-                    if (totalDiv) totalDiv.textContent = formatCurrency(total);
-
-                    alert('Details updated successfully!');
-                    renderViewMode(contentContainer, originalData, headerElement);
-                } else {
-                    alert('Error updating details: ' + result.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to update details.');
-            })
-            .finally(() => {
-                if (saveBtn) {
-                    saveBtn.innerHTML = originalBtnText;
-                    saveBtn.disabled = false;
-                }
-            });
-        }
-
         function createListItem(data) {
             const itemContainer = document.createElement('div');
-            itemContainer.className = 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden';
+            itemContainer.className = 'glass-card rounded-xl overflow-hidden';
 
-            // Header (Clickable)
             const header = document.createElement('div');
-            header.className = 'p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition select-none';
+            header.className = 'p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition select-none';
 
-            // Content Container
             const content = document.createElement('div');
-            content.className = 'accordion-content bg-gray-50 border-t border-gray-100';
+            content.className = 'accordion-content bg-black/20';
 
-            // Header Content
             const headerContent = document.createElement('div');
             headerContent.className = 'flex items-center gap-4 flex-grow';
-            headerContent.onclick = function() { toggleAccordion(header); };
-
+            headerContent.onclick = () => toggleAccordion(header);
             headerContent.innerHTML = `
-                <div class="bg-emerald-100 text-emerald-600 w-10 h-10 rounded-full flex items-center justify-center">
+                <div class="bg-emerald-500/20 text-emerald-300 w-10 h-10 rounded-full flex items-center justify-center border border-emerald-500/30">
                     <i class="fa-regular fa-calendar-check"></i>
                 </div>
                 <div>
-                    <div class="font-bold text-blue-800">${formatDate(data.Date)}</div>
-                    <div class="text-xs text-gray-500">Click to view details</div>
+                    <div class="font-bold text-blue-300">${formatDate(data.Date)}</div>
+                    <div class="text-xs text-gray-400">Click to view details</div>
                 </div>
             `;
 
             const rightSection = document.createElement('div');
             rightSection.className = 'flex items-center gap-3';
 
-            // Edit Button
             const editBtn = document.createElement('button');
-            editBtn.className = 'text-gray-400 hover:text-blue-500 transition p-2 rounded-full hover:bg-blue-50';
+            editBtn.className = 'text-gray-400 hover:text-blue-400 transition p-2 rounded-full hover:bg-blue-500/10';
             editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
-            editBtn.onclick = function(e) {
+            editBtn.onclick = (e) => {
                 e.stopPropagation();
                 localStorage.setItem('editReportData', JSON.stringify(data));
                 window.location.href = 'denominations.html';
@@ -448,12 +310,12 @@
 
             const amountDiv = document.createElement('div');
             amountDiv.className = 'text-right';
-            amountDiv.innerHTML = `<div class="font-bold text-lg text-green-800">${formatCurrency(data.Total)}</div>`;
-            amountDiv.onclick = function() { toggleAccordion(header); };
+            amountDiv.innerHTML = `<div class="font-bold text-lg text-emerald-400">${formatCurrency(data.Total)}</div>`;
+            amountDiv.onclick = () => toggleAccordion(header);
 
             const chevron = document.createElement('i');
-            chevron.className = 'fa-solid fa-chevron-down text-gray-400 rotate-icon';
-            chevron.onclick = function() { toggleAccordion(header); };
+            chevron.className = 'fa-solid fa-chevron-down text-gray-500 rotate-icon ml-2';
+            chevron.onclick = () => toggleAccordion(header);
 
             rightSection.appendChild(editBtn);
             rightSection.appendChild(amountDiv);
@@ -462,10 +324,7 @@
             header.appendChild(headerContent);
             header.appendChild(rightSection);
             itemContainer.appendChild(header);
-
-            // Initial Render of View Mode
             renderViewMode(content, data, header);
-
             itemContainer.appendChild(content);
             return itemContainer;
         }
@@ -488,19 +347,15 @@
                 .then(responsePayload => {
                     loader.classList.add('hidden');
 
-                    // Handle Sheet2 Data
                     if (responsePayload.sheet2Data !== undefined && responsePayload.sheet2Data !== null && responsePayload.sheet2Data !== '') {
                         sheet2Value.textContent = formatCurrency(responsePayload.sheet2Data);
                         sheet2Container.classList.remove('hidden');
                     }
 
-                    // Handle Reports Data
                     const data = responsePayload.reports;
                     if (data && data.length > 0) {
                         container.classList.remove('hidden');
-                        data.forEach(item => {
-                            container.appendChild(createListItem(item));
-                        });
+                        data.forEach(item => container.appendChild(createListItem(item)));
                     } else {
                         emptyState.classList.remove('hidden');
                     }
@@ -509,15 +364,14 @@
                     console.error('Error fetching data:', error);
                     loader.classList.add('hidden');
                     emptyState.innerHTML = `
-                        <i class="fa-solid fa-triangle-exclamation text-6xl mb-4 text-red-300"></i>
-                        <p class="text-xl text-red-500">Error loading reports</p>
-                        <p class="text-sm text-gray-500 mt-2">${error.message}</p>
+                        <i class="fa-solid fa-triangle-exclamation text-6xl mb-4 text-red-400"></i>
+                        <p class="text-xl text-red-300">Error loading reports</p>
+                        <p class="text-sm text-gray-400 mt-2">${error.message}</p>
                     `;
                     emptyState.classList.remove('hidden');
                 });
         }
 
-        // Initial load
         document.addEventListener('DOMContentLoaded', fetchData);
     </script>
     
