@@ -34,19 +34,23 @@ function verifyPin() {
 }
 
 async function verifyFaceId() {
+    // WebAuthn requires a secure context (HTTPS or localhost)
+    if (!window.isSecureContext) {
+        alert("Face ID requires a secure context (HTTPS or localhost). It will not work on file://.");
+        return;
+    }
+
+    if (!window.PublicKeyCredential) {
+        alert("Face ID / Biometrics not supported on this device/browser.");
+        return;
+    }
+
     try {
-        if (!window.PublicKeyCredential) {
-            alert("Face ID / Biometrics not supported on this device.");
+        // Check availability
+        const available = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        if (!available) {
+            alert("Face ID / Touch ID is not set up or available on this device.");
             return;
-        }
-        
-        // Check if platform authenticator is available
-        if (window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
-             const available = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-             if (!available) {
-                 alert("Face ID / Biometrics not available on this device.");
-                 return;
-             }
         }
 
         const challenge = new Uint8Array(32);
@@ -55,33 +59,38 @@ async function verifyFaceId() {
         const publicKeyCredentialCreationOptions = {
             challenge: challenge,
             rp: {
-                name: "Cash Counter Web App",
+                name: "Cash Counter App",
+                // id: window.location.hostname // Optional, defaults to current domain
             },
             user: {
-                id: new Uint8Array(16), // Random ID to force prompt
-                name: "user@example.com",
-                displayName: "User",
+                id: new Uint8Array(16),
+                name: "user@cashcounter.local",
+                displayName: "App User",
             },
-            pubKeyCredParams: [{ alg: -7, type: "public-key" }, { alg: -257, type: "public-key" }],
+            pubKeyCredParams: [
+                { alg: -7, type: "public-key" }, // ES256
+                { alg: -257, type: "public-key" } // RS256
+            ],
             authenticatorSelection: {
-                authenticatorAttachment: "platform",
+                authenticatorAttachment: "platform", // Forces FaceID/TouchID
                 userVerification: "required",
-                residentKey: "discouraged", // Hint to not save the key if possible
+                residentKey: "discouraged", // Try to avoid saving a passkey if possible
                 requireResidentKey: false
             },
             timeout: 60000,
             attestation: "none"
         };
 
+        // This triggers the biometric prompt
         await navigator.credentials.create({ publicKey: publicKeyCredentialCreationOptions });
+        
+        // If successful
         showContent();
 
     } catch (err) {
         console.error("Face ID verification failed:", err);
-        // Don't alert on cancellation to avoid annoyance
-        if (err.name !== 'NotAllowedError') {
-             alert("Face ID verification failed.");
-        }
+        // Alert the user so they know why it failed
+        alert("Authentication failed: " + err.message);
     }
 }
 
