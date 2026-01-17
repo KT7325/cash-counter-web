@@ -58,7 +58,7 @@ async function verifyFaceId() {
                 name: "Cash Counter Web App",
             },
             user: {
-                id: new Uint8Array(16),
+                id: new Uint8Array(16), // Random ID to force prompt
                 name: "user@example.com",
                 displayName: "User",
             },
@@ -66,6 +66,8 @@ async function verifyFaceId() {
             authenticatorSelection: {
                 authenticatorAttachment: "platform",
                 userVerification: "required",
+                residentKey: "discouraged", // Hint to not save the key if possible
+                requireResidentKey: false
             },
             timeout: 60000,
             attestation: "none"
@@ -76,7 +78,10 @@ async function verifyFaceId() {
 
     } catch (err) {
         console.error("Face ID verification failed:", err);
-        alert("Face ID verification failed or cancelled.");
+        // Don't alert on cancellation to avoid annoyance
+        if (err.name !== 'NotAllowedError') {
+             alert("Face ID verification failed.");
+        }
     }
 }
 
