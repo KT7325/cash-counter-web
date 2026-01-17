@@ -16,10 +16,11 @@ function showPinEntry() {
     }
     authContainer.querySelector('p').textContent = 'Verify your Identity';
 
-    // Use requestAnimationFrame to ensure the element is visible before focusing
-    requestAnimationFrame(() => {
+    // Force focus and open keyboard
+    setTimeout(() => {
         pinInput.focus();
-    });
+        pinInput.click(); // Sometimes needed for mobile browsers
+    }, 100);
 }
 
 function verifyPin() {
@@ -90,7 +91,9 @@ async function verifyFaceId() {
     } catch (err) {
         console.error("Face ID verification failed:", err);
         // Alert the user so they know why it failed
-        alert("Authentication failed: " + err.message);
+        if (err.name !== 'NotAllowedError') {
+             alert("Authentication failed: " + err.message);
+        }
     }
 }
 
